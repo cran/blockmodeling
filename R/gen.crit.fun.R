@@ -6,8 +6,8 @@ function(
 #	e1="default",	#weight of the error of binearized matrix
 #	e2="default",	#weight of the error of valued conenctions
 	approach,	#the approach used - can be one of "ss","ad","bin","val", "imp" (yet to be implementer) , "bv", "bi". A vector if different approaches should be used for different relations.
- 	cut = M[M>0],	#the cutting parameter used to binerize a valued network
-	m=NULL,	#suficient value for individual cells, can be specified as a number or a function of a block (or only one of its rows or coulms anslyzed) (max for implicit appraoch)
+	cut = if(length(dim(M))==2) min(M[M>0]) else apply(M,3,function(x)min(x[x>0])),	#the cutting parameter used to binerize a valued network	m=NULL,	#suficient value for individual cells, can be specified as a number or a function of a block (or only one of its rows or coulms anslyzed) (max for implicit appraoch)
+	m= NULL,
 #	s="default",	#suficient value for colum and row statistics
 	FUN="max",	#function to calculate row and colum statistics
 	blocks=NULL,	#permissible block types and their ordering, can be also on of 'structural', 'regular', 'regular.ext' or 'all'. A list if different permissible block types and their ordering should be applied to different relations.
@@ -46,7 +46,7 @@ function(
 	
 #	norm
 #	normbym
-	max.con.val
+#	max.con.val
 
 	if(!is.null(positionWeights))assign(x="pWeights",value=positionWeights,envir=parent.frame())
 	
@@ -116,7 +116,7 @@ function(
 	if(nr==1){
 		directed<-nmode==2||!all(M==t(M))
 	} else{
-		directed<-!all(apply(M,3,function(x)all(x==t(x))))
+		directed<-nmode==2||!all(apply(M,3,function(x)all(x==t(x))))
 	}
 	
 	if(nr!=length(approach)){
@@ -226,8 +226,8 @@ function(
 
 
 
-		fun<-c(tmpfun,"<-function(M,clu,mindim=",mindim,if(use.weights)",blockWeights=bweights" else NULL, if(sameModel)",BLOCKS=expBLOCKS" else NULL,if(!is.null(positionWeights))",positionWeights=pWeights",if(!is.null(m))",m=exm","){\n")
-		if(changeT) {fun2<-c(tmpfun,"<-function(M,clu,mindim=",mindim,if(use.weights)",blockWeights=bweights" else NULL, if(sameModel)",BLOCKS=expBLOCKS" else NULL,if(!is.null(positionWeights))",positionWeights=pWeights",if(!is.null(m))",m=exm",",change",if(nmode==2)", modechange" else NULL,",res.old){\n")}
+		fun<-c(tmpfun,"<-function(M,clu,mindim=",mindim,if(use.weights)",blockWeights=bweights" else NULL, if(sameModel)",BLOCKS=expBLOCKS" else NULL,if(!is.null(positionWeights))",positionWeights=pWeights",if(any(approach%in%c("val","imp")))",m=exm","){\n")
+		if(changeT) {fun2<-c(tmpfun,"<-function(M,clu,mindim=",mindim,if(use.weights)",blockWeights=bweights" else NULL, if(sameModel)",BLOCKS=expBLOCKS" else NULL,if(!is.null(positionWeights))",positionWeights=pWeights",if(any(approach%in%c("val","imp")))",m=exm",",change",if(nmode==2)", modechange" else NULL,",res.old){\n")}
 		fun<-c(fun,"E<-array(NA,dim=c(",k[1],",",k[2],if(nr>1)c(",",nr)else NULL,"))\n","IM<-array(NA,dim=c(",k[1],",",k[2],if(nr>1)paste(",",nr,sep="")else NULL,"))\n")
 		if(changeT) {
 			fun2<-c(fun2,"E<-res.old$E\n",if(normMto2rel) "IM = res.old$completeIM\n" else "IM<-res.old$IM\n")	#image matrix - matrix of types of blocks #,dimnames=list(nclu,nclu)
@@ -255,7 +255,7 @@ function(
 		}
 
 		if(nr>1){
-			if(length(FUN)==1) approach<-rep(FUN,times=nr)			
+			if(length(FUN)==1) FUN<-rep(list(FUN),times=nr)			
 			if(length(approach)==1) approach<-rep(approach,times=nr)
 			if(length(m)==1) m<-rep(m,times=nr)
 			if(length(normbym)==1) normbym<-rep(normbym,times=nr)
@@ -266,8 +266,10 @@ function(
 		
 
 		if(any(approach=="imp")){
+			if(is.null(m)) m<-rep(1,times=length(approach))
 			m[approach=="imp"]<-"max"
 			approach[approach=="imp"]<-"val"
+			print(m)
 		}
 
 		if(any(approach %in% c("ad","ss"))){
@@ -356,9 +358,8 @@ function(
 					}
 				}
 			}
-
-
-			misfun<-is.na(as.numeric(m))
+			
+			misfun<-!grepl(pattern="^[1234567890]+$",x=m)
 			mfun<-m
 
 	#		fun<-c(fun,"m <- ",m,"\n")
@@ -388,8 +389,10 @@ function(
 		}
 
 
-		if(!is.null(m))assign(x="exm",value=m,envir=parent.frame())
-		if(nr>1) fun<-c(fun,"Lm<-m\n")
+		if(!is.null(m)){
+			assign(x="exm",value=m,envir=parent.frame())
+			if(nr>1) fun<-c(fun,"Lm<-m\n")
+		}
 		
 		
 		for(i1 in 1:k[1]){
@@ -398,8 +401,8 @@ function(
 					if(nmode<=2||{cl<-cut(c(i1,i2),breaks=c(0,cumsum(kmode))+0.5,labels=FALSE);cl[1]!=cl[2]}){
 						if(nr>1){
 #							Lm[inr]->m
-							fun<-c(fun,"m<-Lm[",inr,"]\n")
-							LFUN[inr]->FUN
+							if(!is.null(m)) fun<-c(fun,"m<-Lm[",inr,"]\n")
+							LFUN[[inr]]->FUN
 							Lcut[inr]->cut
 							LBLOCKS[[inr]]->BLOCKS
 							LBLOCKS.CV[[inr]]->BLOCKS.CV
