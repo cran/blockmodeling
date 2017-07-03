@@ -1,6 +1,12 @@
-useDynLib(blockmodeling)
+useDynLib(blockmodeling,.registration = TRUE)
 
 #importFrom(sna, gplot)
+
+importFrom("grDevices", "gray", "grey")
+importFrom("graphics", "mtext", "par", "plot.default", "rect", "segments", "text", "title")
+importFrom("methods", "as")
+importFrom("stats", "as.dist", "median", "na.omit", "optimize", "runif")
+importFrom("utils", "read.table", "write.table")
 
 export(check.these.par, crit.fun, opt.par, opt.random.par, opt.these.par) #basic front end functions
 export(genRandomPar) 

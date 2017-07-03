@@ -108,10 +108,6 @@ plot.mat(net, clu=cutree(hclust(d=as.dist(1-D),method="ward"),
    k=2))
 #REGE returns similarities, which have to be converted to
 #disimilarities
-
-res<-opt.random.par(M=net,k=2,rep=10,approach="ss",blocks="reg",
-   FUN="max")
-plot(res) #Hopefully we get the original partition
 }
 \keyword{cluster}% at least one, from doc/KEYWORDS
 \keyword{graphs}% at least one, from doc/KEYWORDS

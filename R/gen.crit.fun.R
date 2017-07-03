@@ -176,7 +176,7 @@ function(
 		dn<-dimnames(M)
 		k<-as.integer(",k[1],")
 		clu<-as.integer(factor(clu))
-		res<- .Fortran('critfunsscom',M=matrix(as.double(M),ncol=n),n=n,clu=clu, k=k,diag=",diag,",err=0,E=diag(k), BM=diag(k))
+		res<- .Fortran(critfunsscom,M=matrix(as.double(M),ncol=n),n=n,clu=clu, k=k,diag=",diag,",err=0,E=diag(k), BM=diag(k))
 		class(res)<-'crit.fun'
 		dn->dimnames(res$M)
     IM<-res$E
@@ -339,8 +339,8 @@ function(
 			if(any(max.con.val!="non")){
 				if(nr==1){
 					if(max.con.val=="m")max.con.val<-m
-					if(max.con.val=="s")max.con.val<-s
-					if(!is.numeric(max.con.val))stop('"max.con.val" must me numeric or a strig with a value "m", "s" or "non"!')
+					#if(max.con.val=="s")max.con.val<-s
+					if(!is.numeric(max.con.val))stop('"max.con.val" must me numeric or a strig with a value "m" or "non"!')
 	
 					M[M>max.con.val]<-max.con.val
 					M[M<(-max.con.val)]<- (-max.con.val)
@@ -348,9 +348,9 @@ function(
 					for(i in 1:nr){
 						tmax.con.val<-max.con.val[i]
 						if(tmax.con.val=="m")tmax.con.val<-m[i]
-						if(tmax.con.val=="s")tmax.con.val<-s[i]						
+						#if(tmax.con.val=="s")tmax.con.val<-s[i]						
 						tmax.con.val<-as.numeric(tmax.con.val)
-						if(is.na(tmax.con.val))stop('"max.con.val" must me numeric or a strig with a value "m", "s" or "non"!')
+						if(is.na(tmax.con.val))stop('"max.con.val" must me numeric or a strig with a value "m" or "non"!')
 						Mi<-M[,,i]
 						Mi[Mi>tmax.con.val]<-tmax.con.val
 						Mi[Mi<(-tmax.con.val)]<- (-tmax.con.val)

@@ -1,3 +1,5 @@
+if(getRversion() >= "2.15.1") utils::globalVariables(c('crit.fun.tmp','useM'))
+	
 "crit.fun" <-
 function(
 	#function for generting a function for computing criteria function of a blockmodel and preparing data
@@ -40,6 +42,8 @@ function(
 	}
 	
 	eval(gen.crit.fun(M=M,k=k,approach=approach,changeT=FALSE,...))
+
+	
 	res<-c(list(M=M),crit.fun.tmp(M=useM,clu=clu),call=match.call())
 	class(res)<-"crit.fun"
 	return(res)

@@ -1,3 +1,5 @@
+ if(getRversion() >= "2.15.1") utils::globalVariables(c('opt.par.tmp'))
+
 "opt.random.par" <-
 function(
 M,#matrix (network)
@@ -46,7 +48,7 @@ maxTriesToFindNewPar=rep*10 	#The maximum number of partition try when trying to
   if(save.initial.param)initial.param<-c(tryCatch(lapply(as.list(sys.frame(sys.nframe())),eval),error=function(...)return("error")),dots=list(...))#saves the inital parameters
   optfun<-gen.opt.par(M=M,k=k,maxiter=maxiter, approach=approach,switch.names=switch.names,trace.iter=trace.iter,save.initial.param = save.initial.param,skip.par=skip.par,save.checked.par=save.checked.par,merge.save.skip.par=merge.save.skip.par,check.skip=check.skip,print.iter=print.iter,mingr=mingr,maxgr=maxgr,...)
   eval(optfun)
-
+  
   nmode<-length(k)
 
   res<-list(NULL)

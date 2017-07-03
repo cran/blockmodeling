@@ -1,5 +1,5 @@
 savepajek<-function(pajekList,filename,twomode="default",asMatrix=FALSE,symetric=NULL){
-    if(length(grep(patt="w32",x=version["os"]))){
+    if(length(grep(pattern="w32",x=version["os"]))){
         eol<-"\n"
     }else{eol<-"\r\n"}
     cat("",file = filename,append=FALSE)

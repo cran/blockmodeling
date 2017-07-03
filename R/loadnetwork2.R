@@ -15,8 +15,8 @@ function(filename,useSparseMatrix=NULL,minN=50){
         useSparseMatrix<- n>=50
     }
     if(useSparseMatrix){
-    	if(require(Matrix)){
-    		M<-Matrix(0,nrow=n,ncol=n,sparse=TRUE)
+    	if(requireNamespace("Matrix")){
+    		M<-Matrix::Matrix(0,nrow=n,ncol=n,sparse=TRUE)
     	}else{
 	        M<-matrix(0,nrow=n,ncol=n)
 	        warning("Matrix package is not installed. Ordanary (dense) matrices will be used instead of sparse onse")    	
@@ -29,7 +29,7 @@ function(filename,useSparseMatrix=NULL,minN=50){
     
     while(TRUE){
     	line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
-    	if(length(line)==0||sum(grep(patt="^ *$",x=as.character(line))==1)) break
+    	if(length(line)==0||sum(grep(pattern="^ *$",x=as.character(line))==1)) break
     	if(substr(line[1],start=1,stop=1)=="*"){
     		type=line[1]
     		next
@@ -57,8 +57,8 @@ function(filename,useSparseMatrix=NULL,minN=50){
     }
     
     if(useSparseMatrix){
-    	if(require(Matrix)){
-    		M<-Matrix(0,nrow=n12,ncol=n12,sparse=TRUE)
+    	if(requireNamespace("Matrix")){
+    		M<-Matrix::Matrix(0,nrow=n12,ncol=n12,sparse=TRUE)
     	}else{
     		warning("Matrix package is not installed. Ordanary (dense) matrices will be used instead of sparse onse")
     		M<-matrix(0,nrow=n12,ncol=n12)
@@ -69,7 +69,7 @@ function(filename,useSparseMatrix=NULL,minN=50){
     
     while(TRUE){
     	line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
-    	if(length(line)==0||sum(grep(patt="^ *$",x=as.character(line))==1)) break
+    	if(length(line)==0||sum(grep(pattern="^ *$",x=as.character(line))==1)) break
     	if(substr(line[1],start=1,stop=1)=="*"){
     		type=line[1]
     		next

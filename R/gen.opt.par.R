@@ -46,12 +46,12 @@ function(
 			clu<-as.integer(factor(clu))
 			k<-max(clu)
 			M[,]<-as.double(M)
-			res<-.Fortran('optparsscom',M=M,clu=clu,diag=diag,maxiter=as.integer(maxiter),n=as.integer(dim(M)[1]),k=k,err=as.double(0),E=diag(k)*as.double(0),BM=diag(k)*as.double(0),cluM=matrix(as.integer(0),nrow=50,ncol=dim(M)[1]),nbest=as.integer(0),iter=as.integer(0),printIter=",print.iter,")
+			res<-.Fortran(optparsscom,M=M,clu=clu,diag=diag,maxiter=as.integer(maxiter),n=as.integer(dim(M)[1]),k=k,err=as.double(0),E=diag(k)*as.double(0),BM=diag(k)*as.double(0),cluM=matrix(as.integer(0),nrow=50,ncol=dim(M)[1]),nbest=as.integer(0),iter=as.integer(0),printIter=",print.iter,")
 			best1<-res[c(2,7,8,9)]
       IM<-best1$E
       IM[,] <- 'com'
       best1$IM<-IM
-			res<-list(M=res$M,best=c(list(best1=best1), if(res$nbest>1) apply(res$cluM[seq(res$nbest),],1,function(x)list(clu=x))[-1]else NULL),nIter=res$iter)
+			res<-list(M=res$M,best=c(list(best1=best1), if(res$nbest>1) apply(res$cluM[seq(min(res$nbest,50)),],1,function(x)list(clu=x))[-1]else NULL),nIter=res$iter)
 			class(res)<-'opt.par'
 			return(res)
 		}")
@@ -69,7 +69,7 @@ function(
 			k1<-max(clu1)
 			k2<-max(clu2)
 			M[,]<-as.double(M)
-			res<-.Fortran('optparsscomtm',M=M,clu1=clu1,clu2=clu2,maxiter=as.integer(maxiter),n1=as.integer(dim(M)[1]),n2=as.integer(dim(M)[2]),k1=k1,k2=k2,err=as.double(0),E=matrix(as.double(0),nrow=k1,ncol=k2),BM=matrix(as.double(0),nrow=k1,ncol=k2),cluM1=matrix(as.integer(0),nrow=50,ncol=dim(M)[1]),cluM2=matrix(as.integer(0),nrow=50,ncol=dim(M)[2]),nbest=as.integer(0),iter=as.integer(0),printIter=",print.iter,")
+			res<-.Fortran(optparsscomtm,M=M,clu1=clu1,clu2=clu2,maxiter=as.integer(maxiter),n1=as.integer(dim(M)[1]),n2=as.integer(dim(M)[2]),k1=k1,k2=k2,err=as.double(0),E=matrix(as.double(0),nrow=k1,ncol=k2),BM=matrix(as.double(0),nrow=k1,ncol=k2),cluM1=matrix(as.integer(0),nrow=50,ncol=dim(M)[1]),cluM2=matrix(as.integer(0),nrow=50,ncol=dim(M)[2]),nbest=as.integer(0),iter=as.integer(0),printIter=",print.iter,")
 			best1<-res[c('err','E','BM')]
 			best1$clu<-list(res$clu1,res$clu2)
 			IM<-best1$E
@@ -99,7 +99,7 @@ function(
 			k1<-max(clu1)
 			k2<-max(clu2)
 			M[,,]<-as.double(M)
-			res<-.Fortran('optparsscomtmmorerel',M=M,clu1=clu1,clu2=clu2,maxiter=as.integer(maxiter),nr=as.integer(dim(M)[3]),n1=as.integer(dim(M)[1]),n2=as.integer(dim(M)[2]),k1=k1,k2=k2,err=as.double(0),E=matrix(as.double(0),nrow=k1,ncol=k2),BM=array(as.double(0),dim=c(k1,k2,nr)),cluM1=matrix(as.integer(0),nrow=50,ncol=dim(M)[1]),cluM2=matrix(as.integer(0),nrow=50,ncol=dim(M)[2]),nbest=as.integer(0),iter=as.integer(0),printIter=",print.iter,")
+			res<-.Fortran(optparsscomtmmorerel,M=M,clu1=clu1,clu2=clu2,maxiter=as.integer(maxiter),nr=as.integer(dim(M)[3]),n1=as.integer(dim(M)[1]),n2=as.integer(dim(M)[2]),k1=k1,k2=k2,err=as.double(0),E=matrix(as.double(0),nrow=k1,ncol=k2),BM=array(as.double(0),dim=c(k1,k2,nr)),cluM1=matrix(as.integer(0),nrow=50,ncol=dim(M)[1]),cluM2=matrix(as.integer(0),nrow=50,ncol=dim(M)[2]),nbest=as.integer(0),iter=as.integer(0),printIter=",print.iter,")
 			best1<-res[c('err','E','BM')]
 			best1$clu<-list(res$clu1,res$clu2)
 			IM<-best1$E

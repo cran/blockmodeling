@@ -2,7 +2,7 @@
 \alias{blockmodeling-package}
 \docType{package}
 \title{
-An R package for Generalized and classical blockmodeling of valued networks
+An R Package for Generalized and Classical Blockmodeling of Valued Networks
 }
 \description{
 This package is primarily meant as an implementation of Generalized blockmodeling. In addition, functions for computation of (dis)similarities in terms of structural and regular equivalence, plotting and other "utility" functions are provided.

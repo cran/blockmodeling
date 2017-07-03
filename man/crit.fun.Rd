@@ -103,6 +103,33 @@ res$err #the error is relativly small
 res$BM  #The block means are around 0 or 4
 plot(res)
 
+#computation of criterion function with the correct partition and correct pre-specified blockmodel
+#prespecified blockmodel used
+# null   com
+# null   null
+B<-array(NA,dim=c(1,2,2))
+B[1,,]<-"null"
+B[1,1,2]<-"com"
+B[1,,]
+res<-crit.fun(M=net,clu=clu,approach="ss",BLOCKS=B)
+res$err #the error is relativly small
+res$IM 
+plot(res)
+
+#computation of criterion function with the correct partition and
+# pre-specified blockmodel with some alternatives
+
+#prespecified blockmodel used
+# null null|com
+# null   null
+B<-array(NA,dim=c(2,2,2))
+B[1,,]<-"null"
+B[2,1,2]<-"com"
+res<-crit.fun(M=net,clu=clu,approach="ss",BLOCKS=B)
+res$err #the error is relativly small
+res$IM 
+plot(res)
+
 #computation of criterion function with random partition
 clu.rnd<-sample(1:2,size=n,replace=TRUE)
 res.rnd<-crit.fun(M=net,clu=clu.rnd,approach="ss",blocks="com")

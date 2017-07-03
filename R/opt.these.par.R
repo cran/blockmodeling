@@ -1,3 +1,5 @@
+if(getRversion() >= "2.15.1") utils::globalVariables(c('opt.par.tmp'))
+
 "opt.these.par" <-
 function(
 	M,	#matrix (network)
@@ -91,7 +93,7 @@ function(
 	})
 
 
-	eval(optfun)
+	eval(optfun)	
 	npar<-length(partitions)
 	for(i in 1:npar){
 		cat("\n\nStarting optimization of the partiton",i,"of",npar,"partitions.\n")
@@ -117,7 +119,7 @@ function(
 					clu=partitions[[i]],
 					k=k,
 					approach=approach,
-					m=m,
+#					m=m,
 					skip.par=skip.par,
 					...
 			)

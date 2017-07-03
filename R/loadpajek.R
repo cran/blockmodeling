@@ -11,7 +11,7 @@ loadpajek<-function(filename){
 			next
 		}
 		nblanklines=0
-		if(sum(grep(patt="^ *$",x=as.character(line))==1)) next
+		if(sum(grep(pattern="^ *$",x=as.character(line))==1)) next
 		if(line[1]=="*Matrix" || line[1]=="*Network"){
 			objName<-paste(line[-1],collapse=" ")
 			if(line[1]=="*Matrix"){

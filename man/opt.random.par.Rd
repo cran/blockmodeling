@@ -93,7 +93,7 @@ This function can be extremly slow. The time complexity is incrising with the nu
 
 DOREIAN, Patrick, BATAGELJ, Vladimir, FERLIGOJ, \enc{Anuška}{Anuska} (2005): Generalized blockmodeling, (Structural analysis in the social sciences, 25). Cambridge [etc.]: Cambridge University Press, 2005. XV, 384 p., ISBN 0-521-84085-6.
 
-BATAGELJ, Vladimir, MRVAR, Andrej (2006): Pajek 1.11, \url{http://vlado.fmf.uni lj.si/pub/networks/pajek/} (accessed January 6, 2006).
+BATAGELJ, Vladimir, MRVAR, Andrej (2006): Pajek 1.11, \url{http://mrvar.fdv.uni-lj.si/pajek/} (accessed January 6, 2006).
 }
 
 \author{\enc{Aleš Žiberna}{Ales Ziberna}}

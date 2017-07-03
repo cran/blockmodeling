@@ -1,3 +1,5 @@
+if(getRversion() >= "2.15.1") utils::globalVariables(c('opt.par.tmp'))
+	
 "opt.par" <-
 function(
 	#function for optimizig partition in blockmodeling
@@ -51,6 +53,8 @@ function(
 
 	optfun<-gen.opt.par(M=M,k=k,maxiter=maxiter,approach=approach,trace.iter=trace.iter,save.initial.param = save.initial.param,skip.par=skip.par,save.checked.par=save.checked.par,merge.save.skip.par=merge.save.skip.par,check.skip=check.skip,switch.names=switch.names,...)
 	eval(optfun)
+
+		
 	return(opt.par.tmp(M=M,clu=clu,k=k,approach=approach,...))
 }
 

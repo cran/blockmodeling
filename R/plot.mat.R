@@ -56,7 +56,7 @@ function(
  	if(class(M)!="matrix"&&class(M)!="mat"){
 		pack<-attr(class(M),"package")
 		if(!(is.null(pack))&&pack=="Matrix"){
-			if(require(Matrix)){
+			if(requireNamespace("Matrix")){
 				M<-as.matrix(M)
 			} else stop("The supplied object needs Matrix packege, but the package is not available (install it!!!).")
 		} else stop("Cannot convert object of class ",class(M)," to class 'matrix'.")

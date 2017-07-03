@@ -1,3 +1,5 @@
+if(getRversion() >= "2.15.1") utils::globalVariables(c('crit.fun.tmp','useM'))
+
 "check.these.par" <-
 function(	#saves the resoult of call a to crit.fun of the best partition and only errors for the rest
 	M,	#matrix (network)
@@ -19,7 +21,6 @@ function(	#saves the resoult of call a to crit.fun of the best partition and onl
 		k<-sapply(partitions[[1]],function(x)length(unique(x)))
 	} else k<-length(unique(partitions[[1]]))
 	eval(gen.crit.fun(M=M,k=k,approach=approach,changeT=FALSE,...))
-
 
 	res<-crit.fun.tmp(M=useM,clu=partitions[[1]])
 	best<-list(res)
