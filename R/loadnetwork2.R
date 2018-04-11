@@ -1,12 +1,32 @@
 "loadnetwork2" <-
-function(filename,useSparseMatrix=NULL,minN=50){
+function(filename,useSparseMatrix=NULL,minN=50,safe=TRUE,closeFile=TRUE){
   if(is.character(filename)){
   	file<-file(description=filename,open="r")
   } else file<-filename
-  n<-read.table(file=file,nrows=1)
+  while(TRUE){
+	line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
+	if(substr(line[1],start=1,stop=1)=="%") {print(paste(line,collapse=" "));next}
+	n<-line
+	break
+  }
   if(length(n)==2){
     n<-as.numeric(n[2])
-    vnames<-read.table(file=file,nrows=n,as.is =TRUE)[,2]
+    if(safe){
+		vnames<-rep(as.character(NA),n)
+		while(TRUE){
+			line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
+			if(length(line)==0||sum(grep(pattern="^ *$",x=as.character(line))==1)) break
+			if(substr(line[1],start=1,stop=1)=="%") {print(paste(line,collapse=" "));next}
+			if(substr(line[1],start=1,stop=1)=="*"){
+				type=line[1]
+				break
+			}
+			vnames[as.integer(line[1])]<-line[2]
+    	}
+    }else{
+    	vnames<-read.table(file=file,nrows=n,as.is =TRUE)[,2]
+    	type=""   	
+    }
     if(all(is.na(vnames))){
         vnames<-NULL
     } else vnames[is.na(vnames)]<-""
@@ -14,6 +34,7 @@ function(filename,useSparseMatrix=NULL,minN=50){
     if(is.null(useSparseMatrix)){
         useSparseMatrix<- n>=50
     }
+
     if(useSparseMatrix){
     	if(requireNamespace("Matrix")){
     		M<-Matrix::Matrix(0,nrow=n,ncol=n,sparse=TRUE)
@@ -25,11 +46,14 @@ function(filename,useSparseMatrix=NULL,minN=50){
         M<-matrix(0,nrow=n,ncol=n)
     }
     
-    type=""
-    
-    while(TRUE){
+    if(type=="*Matrix"){
+        tmp<-read.table(file=file,nrows=n)
+        tmp<-as.matrix(tmp)
+        M[1:n,1:n]<-M
+    } else while(TRUE){
     	line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
     	if(length(line)==0||sum(grep(pattern="^ *$",x=as.character(line))==1)) break
+    	if(substr(line[1],start=1,stop=1)=="%") {print(paste(line,collapse=" "));next}
     	if(substr(line[1],start=1,stop=1)=="*"){
     		type=line[1]
     		next
@@ -47,7 +71,23 @@ function(filename,useSparseMatrix=NULL,minN=50){
     n12<-as.numeric(n[2])
     n1<-as.numeric(n[3])
     n2<-n12-n1
-    vnames<-read.table(file=file,skip=1,nrows=n12,as.is =TRUE)[,2]
+    if(safe){
+		vnames<-rep(as.character(NA),n12)
+		while(TRUE){
+			line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
+			if(length(line)==0||sum(grep(pattern="^ *$",x=as.character(line))==1)) break
+			if(substr(line[1],start=1,stop=1)=="%") {print(paste(line,collapse=" "));next}
+			if(substr(line[1],start=1,stop=1)=="*"){
+				type=line[1]
+				break
+			}
+			vnames[as.integer(line[1])]<-line[2]
+    	}
+    }else{
+    	vnames<-read.table(file=file,nrows=n12,as.is =TRUE)[,2]
+    	type=""   	
+    }
+
     if(all(is.na(vnames))){
         vnames<-NULL
     } else vnames[is.na(vnames)]<-""
@@ -66,10 +106,14 @@ function(filename,useSparseMatrix=NULL,minN=50){
     } else {
 	M<-matrix(0,nrow=n12,ncol=n12)       
     }
-    
-    while(TRUE){
+    if(type=="*Matrix"){
+        tmp<-read.table(file=file,nrows=n1)
+        tmp<-as.matrix(tmp)
+        M[1:n1,(n1+1):n12]<-tmp
+    } else while(TRUE){
     	line<-scan(file = file, nlines =1,what="char",quiet =TRUE)
     	if(length(line)==0||sum(grep(pattern="^ *$",x=as.character(line))==1)) break
+    	if(substr(line[1],start=1,stop=1)=="%") {print(paste(line,collapse=" "));next}
     	if(substr(line[1],start=1,stop=1)=="*"){
     		type=line[1]
     		next
@@ -81,5 +125,6 @@ function(filename,useSparseMatrix=NULL,minN=50){
     dimnames(M)<-list(vnames,vnames)
     M<-M[1:n1,(n1+1):n12]    
   }
+  if(closeFile) close(file)
   return(M)
 }

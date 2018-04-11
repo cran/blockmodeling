@@ -1,18 +1,21 @@
 ! REGDI.FOR 3/18/85 - DOUG WHITE'S REGULAR DISTANCES PROGRAM
       subroutine regdne(R,B,N,NR,ITER)
-      DOUBLE PRECISION   R, B, DEG, SUM, CM, Row, Col, SUMM
+      DOUBLE PRECISION   R, B, DEG, SUM, CM, Row, Col, SUMM, SM, DM, CMIKJM, XMIN
       INTEGER NR, N, ITER, KR, JJ, II
       DIMENSION  DEG (N), SUM (N,N), R (N,N, NR), B (N,N), Row(N), Col(N)
 
 !     COMPUTE DEGREE, SUMS FOR I-->K, INITIAL STRUCTURAL DISTANCE
       DO 100 I=1,N
       DEG(I)=0.0
-      DO 100 J=1,N
+      DO 99 J=1,N
       SUM(I,J)=0.0
       DO 50 KR=1,NR
       SM = R(I,J,KR)**2 + R(J,I,KR)**2
-   50 SUM(I,J)=SUM(I,J) + sm
-  100 DEG(I)=DEG(I)+SUM(I,J)
+      SUM(I,J)=SUM(I,J) + sm
+   50 END DO
+      DEG(I)=DEG(I)+SUM(I,J)
+   99 END DO
+  100 END DO 
 
       IQUIT=0
 
@@ -47,7 +50,8 @@
 ! 0 should be allowed as a best fit for small values      IF(SUM(J,M).EQ.0.0) GO TO 400
       SUMM=0.0
       DO 300 KR=1,NR
-300   summ = summ + (R(I,K,KR) - R(J,M,KR)) **2 + (R(K,i,KR) - R(M,j,KR)) **2 
+      summ = summ + (R(I,K,KR) - R(J,M,KR)) **2 + (R(K,i,KR) - R(M,j,KR)) **2 
+ 300  CONTINUE 
       CMIKJM = max (Summ, sum(i,k) * b (max (k,m), min (k,m)))
 !     IF PERFECT MATCH DESIRED, CORRECT MATCH
 !     IF(SUMM.NE.SUM(I,K).AND.NOERRS.EQ.1)  CMIKJM=DEG(II)+DEG(JJ)
@@ -61,7 +65,8 @@
   500  CONTINUE
   505  CONTINUE
 !     COMPUTE REGULAR DISTANCE
-  506 DM = DEG(II)+DEG(JJ)
+  !506 CONTINUE 
+     DM = DEG(II) + DEG(JJ)
 ! REMEMBER BOTH POINTS TAKEN AS REFERENCE
       if(cm.gt.dm) cm=DM
       IF(DM.NE.0.0) B (II,JJ)=CM/DM
@@ -79,7 +84,8 @@
 ! symmetrize : to lower half matrix
       DO 650 I = 2, N
       DO 600 J = 1, i-1
-  600 B(i,j) = B(j,i) 
+      B(i,j) = B(j,i) 
+  600 CONTINUE
   650 CONTINUE
   
       DO K = 1, 15

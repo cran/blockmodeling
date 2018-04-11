@@ -1,34 +1,26 @@
-"loadnetwork" <-
+"loadnetwork3" <-
 function(filename,useSparseMatrix=NULL,minN=50){
   trim.trailing <- function (x) sub("\\s+$", "", x)
-
-  n<-c("%")
-  i=0
-  repeat {
-    n<-read.table(file=filename,nrows=1,as.is=TRUE,skip = i)
-    if(substr(n[1],1,1)!="%") break
-    print(paste(n,collapse=" "))
-    i=i+1
+  rLines<-readLines(con=filename)
+  nl<-length(rLines)
+  ind.stars<-which(regexpr(pattern="*", text=rLines,fixed=TRUE)>0)
+  nstars<-length(ind.stars)
+  stars<-rLines[ind.stars]
+  stars<-trim.trailing(stars)
+  if(ind.stars[1]!=1){
+    print(paste(rLines[1:(ind.stars[1]-1)],collapse="\n"))
   }
+  rm(rLines)  
+  n<-read.table(file=filename,skip=ind.stars[1]-1, nrows=1)
+  print(paste(n,collapse=" "))
   if(length(n)==2){
     n<-as.numeric(n[2])
-    n
-    rLines<-readLines(con=filename)
-    nl<-length(rLines)
-    #ind.stars<-which(regexpr(pattern="*", text=rLines,fixed=TRUE)>0)
-    ind.stars<-which(substr(rLines,1,1)=="*")
-    nstars<-length(ind.stars)
-    stars<-rLines[ind.stars]
-    stars<-trim.trailing(stars)
-    rm(rLines)
-    
-    vnames1<-read.table(file=filename,skip=ind.stars[1],nrows=ind.stars[2]-ind.stars[1]-1,as.is =TRUE)
-    vnames<-character(n)
-    vnames[vnames1[,1]]<-vnames1[,2]
+    vnames<-rep(as.character(NA),n)
+    vnamesTab<-read.table(file=filename,skip=1,nrows=ind.stars[2]-ind.stars[1],as.is =TRUE)
+    vnames[vnamesTab[,1]]<-vnamesTab[,2]
     if(all(is.na(vnames))){
-      vnames<-NULL
+        vnames<-NULL
     } else vnames[is.na(vnames)]<-""
-    
     if(is.null(useSparseMatrix)){
         useSparseMatrix<- n>=50
     }
@@ -65,9 +57,9 @@ function(filename,useSparseMatrix=NULL,minN=50){
       	ties<-ties[,1:3]
       }
       ties<-apply(ties,2,as.numeric)
-      if(stars[i]=="*Arcs"|stars[i]=="*arcs"){
+      if(tolower(stars[i])=="*arcs"){
         M[ties[,1:2]]<-ties[,3]
-      } else if(stars[i]=="*Edges"|stars[i]=="*edges"){
+      } else if(tolower(stars[i])=="*edges"){
         M[ties[,1:2]]<-ties[,3]
         M[ties[,2:1]]<-ties[,3]
       }
@@ -77,23 +69,17 @@ function(filename,useSparseMatrix=NULL,minN=50){
       n12<-as.numeric(n[2])
       n1<-as.numeric(n[3])
       n2<-n12-n1
-
+      vnames1<-read.table(file=filename,skip=1,nrows=n12)[,2]
+    vnames<-read.table(file=filename,skip=1,nrows=n12,as.is =TRUE)[,2]
+    if(all(is.na(vnames))){
+        vnames<-NULL
+    } else vnames[is.na(vnames)]<-""
     rLines<-readLines(con=filename)
     nl<-length(rLines)
-    #ind.stars<-which(regexpr(pattern="*", text=rLines,fixed=TRUE)>0)
-    ind.stars<-which(substr(rLines,1,1)=="*")
+    ind.stars<-which(regexpr(pattern="*", text=rLines,fixed=TRUE)>0)
     nstars<-length(ind.stars)
     stars<-rLines[ind.stars]
     rm(rLines)
-    
-    vnames1<-read.table(file=filename,skip=ind.stars[1],nrows=ind.stars[2]-ind.stars[1]-1,as.is =TRUE)
-    vnames<-character(n12)
-    vnames[vnames1[,1]]<-vnames1[,2]
-    if(all(is.na(vnames))){
-      vnames<-NULL
-    } else vnames[is.na(vnames)]<-""
-    
-    
     if(is.null(useSparseMatrix)){
         useSparseMatrix<- n12>50
     }    

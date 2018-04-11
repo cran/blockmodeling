@@ -1,7 +1,7 @@
 ! REGE_OWNM_R.F Ales Ziberna, 2006 - ONE WAY, NORMALIZED MATRICES version of REGE (Douglas R. White, 1985)
 !  THIS VERSION ALLOWS USER TO SET THE NUMBER OF ITERATIONS 
       subroutine regeownm(R,B,N,NR,ITER)
-      DOUBLE PRECISION   R, B, DEG, SUM, SUMM1, SUMM2, XMAX1, XMAX2, CMIKJM1, CMIKJM2
+      DOUBLE PRECISION   R, B, DEG, SUM, SUMM1, SUMM2, XMAX1, XMAX2, CMIKJM1, CMIKJM2, CM, DM
       INTEGER NR, N, ITER, JJ, II !, KR
       DIMENSION  DEG (N), SUM (N,N),R (N,N, NR), B (N,N)
 
@@ -9,10 +9,11 @@
 !     COMPUTE DEGREE, SUMS FOR I--&gt;K, INITIAL STRUCTURAL EQUIV.
       DO 100 I=1,N
       DEG(I) = 0.0
-      DO 100 J=1,N
+      DO 99 J=1,N
       SUM(I,J)= R(I,J,1) + R(J,I,2)
-  100 DEG(I)=DEG(I) + SUM(I,J)
-
+      DEG(I)=DEG(I) + SUM(I,J)
+  99 END DO
+ 100 END DO
 !     BEGIN ITERATIONS
       DO 700 L=1,ITER
 !     INITIALIZE DIFFERENCE IN SUCCESSIVE SE MATRICES
@@ -72,8 +73,10 @@
 
 ! symmetrize : to lower half matrix
       DO 600 I = 2, N
-      DO 600 J = 1, i-1
-  600 B(i,j) = B(j,i) 
+      DO 599 J = 1, i-1
+      B(i,j) = B(j,i)
+  599 END DO
+  600 END DO 
   700 CONTINUE
 
       END

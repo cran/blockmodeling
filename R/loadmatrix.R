@@ -2,7 +2,11 @@
 structure(function(filename){
   if(is.character(filename)) {file<-file(description=filename,open="r")
   }else file<-filename
-nn<-read.table(file=file,nrows=1)
+  nn<-c("%")
+  while(substr(nn[1],1,1)=="%") {
+      nn<-read.table(file=file,nrows=1)
+      print(paste(nn,collapse=" "))}
+
 if (length(nn) == 2)
   { xx<-read.table(file=file,nrows=nn[[2]],fill=TRUE)
     n<-read.table(file=file,skip=1,nrows=nn[[2]])

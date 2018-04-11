@@ -18,8 +18,9 @@ REGE.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
   
-	E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(rege,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  E<-matrix(E,ncol=N, nrow=N)
+  diag(E)<-1.0
+  res<-.Fortran("rege",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -48,8 +49,9 @@ REGD.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
   E<-matrix(as.double(E),ncol=N, nrow=N)
+  diag(E)<-1.0
 	
-	res<-.Fortran(regd,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+	res<-.Fortran("regd",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -79,7 +81,8 @@ REGE.ow.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
 	E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regeow,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+	diag(E)<-1.0
+  res<-.Fortran("regeow",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -107,8 +110,9 @@ REGD.ow.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
   E<-matrix(as.double(E),ncol=N, nrow=N)
+  diag(E)<-1.0
 	
-  res<-.Fortran(regdow,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  res<-.Fortran("regdow",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -156,7 +160,8 @@ REGE.ownm.for<-function(
   }
 
   E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regeownm,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  diag(E)<-1.0
+  res<-.Fortran("regeownm",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -202,7 +207,8 @@ REGE.ownm.diag.for<-function(
   }
 
   E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regeownmdiag,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  diag(E)<-1.0
+  res<-.Fortran("regeownmdiag",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -250,7 +256,8 @@ REGE.nm.for<-function(
   }
 
   E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regenm,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  diag(E)<-1.0
+  res<-.Fortran("regenm",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -295,7 +302,8 @@ REGE.nm.diag.for<-function(
   }
 
   E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regenmdiag,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  diag(E)<-1.0
+  res<-.Fortran("regenmdiag",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -329,7 +337,8 @@ REGE.ne.for<-function(
   dimnames(M)<-dnM
   
 	E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regene,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+	diag(E)<-1.0
+  res<-.Fortran("regene",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -358,7 +367,8 @@ REGE.ow.ne.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
 	E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regeowne,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+	diag(E)<-1.0
+  res<-.Fortran("regeowne",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -403,7 +413,8 @@ REGE.ownm.ne.for<-function(
   }
 
   E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regeownmne,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  diag(E)<-1.0
+  res<-.Fortran("regeownmne",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -451,7 +462,8 @@ REGE.nm.ne.for<-function(
   }
 
   E<-matrix(E,ncol=N, nrow=N)
-  res<-.Fortran(regenmne,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  diag(E)<-1.0
+  res<-.Fortran("regenmne",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -480,8 +492,9 @@ REGD.ne.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
   E<-matrix(as.double(E),ncol=N, nrow=N)
+  diag(E)<-1.0
 	
-	res<-.Fortran(regdne,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+	res<-.Fortran("regdne",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E
@@ -511,8 +524,9 @@ REGD.ow.ne.for<-function(
   M<-structure(as.double(M),dim=dM)
   dimnames(M)<-dnM
   E<-matrix(as.double(E),ncol=N, nrow=N)
+  diag(E)<-1.0
 	
-  res<-.Fortran(regdowne,M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
+  res<-.Fortran("regdowne",M = M, E = E, N = as.integer(N), NR = as.integer(NR), iter = as.integer(iter))
   Eall<-array(NA,dim=c(dim(E),2))
   Eall[,,1]<-E
   Eall[,,2]<-res$E

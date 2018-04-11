@@ -14,64 +14,75 @@ addParam = list(
     } else probGenMech<-addParam$probGenMech
     if(!is.null(seed))set.seed(seed)
     nmode <- length(k)
-    ver<-sample(1:4,size=1,prob=probGenMech)
-      if(nmode==1){
+    if(nmode==1){
+        mingr<-mingr[1]
+        maxgr<-maxgr[1]
         find.new.par<-TRUE
-	while(find.new.par){
-	  if(ver!=4){
-		temppar<-integer(n)
+		while(find.new.par){
+      	  ver<-sample(1:4,size=1,prob=probGenMech)
+		  if(ver!=4){
+			temppar<-integer(n)
 
-		if(ver==1){
-			temppar<-1:n%%k+1	
-		}
+			if(ver==1){
+				temppar<-1:n%%k+1	
+			}
 
-		if(ver==2){
-			temppar[1:k]<-1:k
-			temppar[(k+1):n]<-k
-		}
+			if(ver==2){
+				temppar[1:k]<-1:k
+				temppar[(k+1):n]<-k
+			}
 
-		if(ver==3){
-			temppar[1:k]<-1:k
-			temppar[(k+1):n]<-1+trunc(k*runif(n-k))
-		}
+			if(ver==3){
+				temppar[1:k]<-1:k
+				temppar[(k+1):n]<-1+trunc(k*runif(n-k))
+			}
 
-		for(ii in n:2){
-			jj<-trunc(ii*runif(1))
-			temppar[c(ii,jj)]<-temppar[c(jj,ii)]
-		}
-          }else temppar<-sample(1:k,n,replace=TRUE)
-          temptab<-table(temppar)
-          if(length(temptab)==k&min(temptab)>=mingr&max(temptab)<=maxgr)find.new.par<-FALSE
-        }
+			for(ii in n:2){
+				jj<-trunc(ii*runif(1))
+				temppar[c(ii,jj)]<-temppar[c(jj,ii)]
+			}
+		  }else temppar<-sample(1:k,n,replace=TRUE)
+			  temptab<-table(temppar)
+			  if((length(temptab)==k)&(min(temptab)>=mingr)&(max(temptab)<=maxgr)){
+			  	find.new.par<-FALSE
+			  	temppar<-as.numeric(factor(temppar,levels=sample(1:k)))
+			  }
+		  }
       }else{
         temppar<-NULL
+        mingr<-rep(mingr,length.out=nmode)
+        maxgr<-rep(maxgr,length.out=nmode)
         for(imode in 1:nmode){
           find.new.par<-TRUE
           while(find.new.par){
+          	ver<-sample(1:4,size=1,prob=probGenMech)
             if(ver!=4){
-		itemppar<-integer(n[imode])
+				itemppar<-integer(n[imode])
 
-		if(ver==1){
-			itemppar<-1:n[imode]%%k[imode]+1	
-		}
+				if(ver==1){
+					itemppar<-1:n[imode]%%k[imode]+1	
+				}
 
-		if(ver==2){
-			itemppar[1:k[imode]]<-1:k[imode]
-			itemppar[(k[imode]+1):n[imode]]<-k[imode]
-		}
+				if(ver==2){
+					itemppar[1:k[imode]]<-1:k[imode]
+					itemppar[(k[imode]+1):n[imode]]<-k[imode]
+				}
 
-		if(ver==3){
-			itemppar[1:k[imode]]<-1:k[imode]
-			itemppar[(k[imode]+1):n[imode]]<-1+trunc(k[imode]*runif(n[imode]-k[imode]))
-		}
+				if(ver==3){
+					itemppar[1:k[imode]]<-1:k[imode]
+					itemppar[(k[imode]+1):n[imode]]<-1+trunc(k[imode]*runif(n[imode]-k[imode]))
+				}
 
-		for(ii in n[imode]:2){
-			jj<-trunc(ii*runif(1))
-			itemppar[c(ii,jj)]<-itemppar[c(jj,ii)]
-		}
+				for(ii in n[imode]:2){
+					jj<-trunc(ii*runif(1))
+					itemppar[c(ii,jj)]<-itemppar[c(jj,ii)]
+				}
             }else itemppar<-sample(1:k[imode],n[imode],replace=TRUE)
             temptab<-table(itemppar)
-            if((length(temptab)==k[imode])&(min(temptab)>=mingr)&(max(temptab)<=maxgr))find.new.par<-FALSE
+            if((length(temptab)==k[imode])&(min(temptab)>=mingr[imode])&(max(temptab)<=maxgr[imode])){
+            	find.new.par<-FALSE
+            	itemppar<-as.numeric(factor(itemppar,levels=sample(1:k[imode])))
+            }
           }
           temppar<-c(temppar,list(itemppar))
         }

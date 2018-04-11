@@ -1,22 +1,25 @@
 ! REGD_OW_NE_R.F Ales Ziberna, 2006 - ONEWAY version of REGD (Douglas R. White, 1985)
       subroutine regdowne(R,B,N,NR,ITER)
-      DOUBLE PRECISION   R, B, DEG, SUM, SUMM1, SUMM2, XMIN1, XMIN2, CMIKJM1, CMIKJM2, CM, Row, Col
+      DOUBLE PRECISION   R, B, DEG, SUM, SUMM1, SUMM2, XMIN1, XMIN2, CMIKJM1, CMIKJM2, CM, Row, Col, SM, DM
       INTEGER NR, N, ITER, KR, JJ, II
       DIMENSION  DEG (N), SUM (N,N), R (N,N, NR), B (N,N), Row(N), Col(N)
 
 !     COMPUTE DEGREE, SUMS FOR I-->K, INITIAL STRUCTURAL DISTANCE
       DO 100 I=1,N
-      DO 100 J=1,N
+      DO 99 J=1,N
       SUM(I,J)=0.0
       DO 50 KR=1,NR
       SM = R(I,J,KR)**2
-   50 SUM(I,J)=SUM(I,J) + SM
-  100 CONTINUE
-      DO 101 I=1,N
+      SUM(I,J)=SUM(I,J) + SM
+   50 END DO
+   99 END DO
+  100 END DO
+      DO 102 I=1,N
       DEG(I)=0.0
       DO 101 J=1,N
-  101 DEG(I)=DEG(I)+SUM(I,J)+SUM(J,I)
-
+      DEG(I)=DEG(I)+SUM(I,J)+SUM(J,I)
+ 101  END DO
+ 102  END DO
 !      IQUIT=0
 
 !     BEGIN ITERATIONS
@@ -53,7 +56,8 @@
       SUMM2=0.0
       DO 300 KR=1,NR
       IF(R(I,K,KR).NE.0.0) summ1 = summ1 + (R(I,K,KR) - R(J,M,KR)) **2
-300   IF(R(K,I,KR).NE.0.0) summ2 = summ2 + (R(K,I,KR) - R(M,J,KR)) **2 
+      IF(R(K,I,KR).NE.0.0) summ2 = summ2 + (R(K,I,KR) - R(M,J,KR)) **2 
+300   END DO
       CMIKJM1 = max (summ1, sum(i,k) * b (max (k,m), min (k,m)))
       CMIKJM2 = max (summ2, sum(k,i) * b (max (k,m), min (k,m)))
 !     IF PERFECT MATCH DESIRED, CORRECT MATCH
@@ -80,7 +84,8 @@
   500  CONTINUE
   505  CONTINUE
 !     COMPUTE REGULAR DISTANCE
-  506 DM = DEG(II)+DEG(JJ)
+ ! 506 
+      DM = DEG(II)+ DEG(JJ)
 ! REMEMBER BOTH POINTS TAKEN AS REFERENCE
       if(cm.gt.dm) cm=DM
       IF(DM.NE.0.0) B (II,JJ)=CM/DM
@@ -94,7 +99,8 @@
 ! symmetrize : to lower half matrix
       DO 650 I = 2, N
       DO 600 J = 1, i-1
-  600 B(i,j) = B(j,i) 
+      B(i,j) = B(j,i)
+  600 END DO 
   650 CONTINUE
       
       DO K = 1, 15
@@ -127,6 +133,6 @@
 !      IF(IQUIT.EQ.1) GO TO 800
 
   700 CONTINUE
-  800 CONTINUE
+
  
       END

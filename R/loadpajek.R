@@ -11,12 +11,16 @@ loadpajek<-function(filename){
 			next
 		}
 		nblanklines=0
+        if (substr(line[1],start=1,stop=1)=="%") {
+            print(paste(line,collapse=" "))
+            next
+        }
 		if(sum(grep(pattern="^ *$",x=as.character(line))==1)) next
 		if(line[1]=="*Matrix" || line[1]=="*Network"){
 			objName<-paste(line[-1],collapse=" ")
 			if(line[1]=="*Matrix"){
 				readObj<-loadmatrix(file)
-			}else readObj<-loadnetwork2(file)
+			}else readObj<-loadnetwork2(file, closeFile=FALSE)
 
 			if(objName %in% names(res[["Networks"]])){
 				i<-1
