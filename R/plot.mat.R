@@ -57,15 +57,21 @@ function(
     joinColOperator = "+",
     colTies=FALSE,
     maxValPlot=NULL, # maximal value used for determining the color of cells in the plot. This value and all higher (in absolute terms) will produce a pure black/red color
-	  printMultipliedMessage = TRUE, # shold mutiplication message be printed when values were the printed tie values are multiplied
-	  replaceNAdiagWith0=TRUE, #Should the diagonal with only NAs be replace by 0s?
+	printMultipliedMessage = TRUE, # shold mutiplication message be printed when values were the printed tie values are multiplied
+	replaceNAdiagWith0=TRUE, #Should the diagonal with only NAs be replace by 0s?
+	colLabels=FALSE, # Should the labels of units be colored. If FALSE, these are not collored, if TRUE, they are colored with colors of clusters as defined by palette. This can be aslo a vector of colors (or integers) for one-mode networks or a list of two such vectors for two-mode networks.
     ... #aditional arguments to plot.default
 ){
     old.mar<-par("mar")
-    if(length(dim(IM))>2&use.IM){
+    if(length(dim(IM))>length(dim(IM))&use.IM){
         if(is.null(wIM))wIM<-wnet
         if(is.null(wIM)) wIM<-1
-        IM<-IM[wIM,,]
+        if(length(dim(IM))==3) {
+          IM<-IM[wIM,,]
+        } else{
+          warning("IM will not be used for plotting. Cannot be sure how to extract the appropirate part!")
+          use.IM<-FALSE
+        }
     }
     tempClu<-clu
 	
@@ -76,7 +82,7 @@ function(
             relDim<-which.min(dim(M))
             if(relDim==1){
                 M<-M[wnet,,]
-            }else if(relDim==1){
+            }else if(relDim==3){
                     M<-M[,,wnet]
             }else stop("More than 2 dimensions where relation dimension can not be determined")
         }else{
@@ -169,6 +175,15 @@ function(
     }
 
     if(!is.null(clu)){  #is any clustering provided, ordering of the matrix if 'TRUE'
+      if(is.list(clu)){
+        clu<-lapply(clu,function(x)as.integer(as.factor(x)))
+        tmNclu<-sapply(clu,max)
+        for(iMode in 2:length(tmNclu)){
+          clu[[iMode ]]<-clu[[iMode ]]+sum(tmNclu[1:(iMode -1)])
+        }
+        unlistClu<-unlist(clu)
+        if( all(length(unlistClu)==dm)) clu<-unlistClu
+      }
         if(!is.list(clu)){
             tclu<-table(clu)
             or.c<-or.r<-order(clu)
@@ -220,13 +235,16 @@ function(
     dens<-dens[or.r,or.c]
   }
 
-
-    if(cex.axes=="default"){    #defining the size of text on the axes
-        cex.x.axis<-min(15/dm[2],1)
+	if(length(cex.axes)==1) cex.axes<-c(cex.axes,cex.axes)
+    if(cex.axes[1]=="default"){    #defining the size of text on the axes
         cex.y.axis<-min(15/dm[1],1)
     }else{
-        cex.x.axis<-cex.axes
-        cex.y.axis<-cex.axes
+        cex.y.axis<-cex.axes[1]
+    }
+    if(cex.axes[2]=="default"){    #defining the size of text on the axes
+        cex.x.axis<-min(15/dm[2],1)
+    }else{
+        cex.x.axis<-cex.axes[2]
     }
 
     #defining text on the axes
@@ -293,8 +311,37 @@ function(
         if(!is.null(lines.row)) segments(x0=x0ParLine,x1=x1ParLine,y0=lines.row,y1=lines.row,col=par.line.col,lwd=par.line.width)
         if(!is.null(lines.col)) segments(y0=y0ParLine,y1=y1ParLine,x0=lines.col,x1=lines.col,col=par.line.col,lwd=par.line.width )
     }
-    if(print.y.axis.val) text(x=y.axis.val.pos, y = (dm[1]:1)/dm[1]-1/dm[1]/2 +val.y.coor.cor,labels = yaxe,cex=cex.y.axis,adj=1)
-    if(print.x.axis.val) text(y=x.axis.val.pos, x = (1:dm[2])/dm[2]-1/dm[2]/2 +val.x.coor.cor, srt=90, labels = xaxe, cex=cex.x.axis,adj=0)
+	
+	colYlabels <- colXlabels <- 1
+	if((length(colLabels)==1)&&is.logical(colLabels)){
+		if(colLabels){
+			if(is.null(clu)){
+				warning("clu not used!")
+			} else {
+				colYlabels <- clu[[1]]
+				colXlabels <- clu[[2]]
+			}
+		} 
+	} else{
+		if(!is.list(colLabels))colLabels<-list(colLabels,colLabels)
+		if(length(colLabels[[1]])==dm[1]){
+			colYlabels<-colLabels[[1]]
+		} else {
+			warning("colLabels for first dimmension of wrong length, no colors will be used!")
+		}
+		if(length(colLabels[[2]])==dm[2]){
+			colXlabels<-colLabels[[2]]
+		} else {
+			warning("colLabels for second dimmension of wrong length, no colors will be used!")
+		}	
+	}		
+	if(!is.null(clu)){
+		if(length(colXlabels)>1) colXlabels<-colXlabels[or.c]
+		if(length(colYlabels)>1) colYlabels<-colYlabels[or.r]
+	}
+	
+    if(print.y.axis.val) text(x=y.axis.val.pos, y = (dm[1]:1)/dm[1]-1/dm[1]/2 +val.y.coor.cor,labels = yaxe,cex=cex.y.axis,adj=1, col=colYlabels)
+    if(print.x.axis.val) text(y=x.axis.val.pos, x = (1:dm[2])/dm[2]-1/dm[2]/2 +val.x.coor.cor, srt=90, labels = xaxe, cex=cex.x.axis,adj=0, , col=colXlabels)
     title(outer=outer.title,ylab=ylab,xlab=xlab,main=main, line=title.line,cex.main=cex.main)
     if(print.val){  #ploting the values in the cells if selected
         norm.val<-as.vector(M)/max(abs(M))
@@ -374,6 +421,7 @@ function(
 function(
     x=M, #x should be a matrix or similar object
     M=x, #M should be a matrix or similar object - both (x and M) are here to make the code compatible with generic plot and with older versions of plot.mat and possbily some other functions in the package
+    IM=NULL, #the image to be used for plotting
     ...,    #aditional arguments to plot.mat
     main.title=NULL,main.title.line=-2,mfrow=NULL
 ){
@@ -401,10 +449,12 @@ function(
     
     relNames<-dimnames(M)[[relDim]]
     if(is.null(relNames)) relNames<-1:nDim
-    for(iName in relNames) {
+    for(i in 1:nDim){
+    #for(iName in relNames) 
+        iName<-relNames[i]
         if(relDim==1){
-            plot.mat(M[iName,,],main=iName,...)
-        } else if(relDim==3) plot.mat(M[,,iName],main=iName,...)
+            plot.mat(M[iName,,],main=iName, IM=IM[i,,],...)
+        } else if(relDim==3) plot.mat(M[,,iName],main=iName, IM=IM[i,,],...)
     }
     
     title(main=main.title,outer=TRUE,line=main.title.line)

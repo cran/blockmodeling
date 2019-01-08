@@ -18,24 +18,29 @@ critFunC(M, clu, approaches, blocks, isTwoMode = NULL, isSym = NULL,
     blockTypeWeights = 1, combWeights = NULL, returnEnv = FALSE)
     
     
-optParC(M, nMode = NULL,isSym = NULL, diag = 1, clu, approaches, blocks,
-    useMulti = FALSE, maxPar = 50, IM = NULL, EM = NULL, Earr = NULL,
-    justChange = FALSE, sameIM = FALSE, regFun = "max", homFun = "ss",
-    usePreSpecM = NULL, preSpecM = NULL, minUnitsRowCluster = 1,
-    minUnitsColCluster = 1, maxUnitsRowCluster = 9999,
-    maxUnitsColCluster = 9999, relWeights = 1, posWeights = 1,
-    blockTypeWeights = 1, combWeights = NULL, exchageClusters = "all",
-    save.initial.param = TRUE)
-}
+optParC(M, clu, approaches, blocks, nMode = NULL, isSym =
+     NULL, diag = 1, useMulti = FALSE, maxPar = 50, IM =
+     NULL, EM = NULL, Earr = NULL, justChange = FALSE,
+     sameIM = FALSE, regFun = "max", homFun = "ss",
+     usePreSpecM = NULL, preSpecM = NULL,
+     minUnitsRowCluster = 1, minUnitsColCluster = 1,
+     maxUnitsRowCluster = 9999, maxUnitsColCluster = 9999,
+     relWeights = 1, posWeights = 1, blockTypeWeights = 1,
+     combWeights = NULL, exchageClusters = "all",
+     save.initial.param = TRUE)
+  }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{M}{A matrix representing the (usually valued) network. For multi-relational networks, this should be an array with the third dimension representing the relation. The network can have one or more modes (diferent kinds of units with no ties among themselves). If the network is not two-mode, the matrix must be square.}
-\item{clu}{A partition. Each unique value represents one cluster. If the nework is one-mode, than this should be a vector, else a list of vectors, one for each mode.}
+\item{clu}{A partition. Each unique value represents one cluster. If the nework is one-mode, than this should be a vector, else a list of vectors, one for each mode. Similarly, if units are comprised of several sets, \code{clu} should be the list containing one vector for each set.}
 \item{approaches}{One of the approaches (for each relation in multi-relational netowrks in a vector) described in Žiberna (2007). Possible values are:\cr
   "bin" - binary blockmodeling,\cr
   "val" - valued blockmodeling,\cr
-  "ss" - sum of squares homogenity blockmodeling, and\cr
-  "ad" - absolute deviations homogenity blockmodeling.}
+  "hom" - homogeneity blockmodeling,\cr
+  "ss" - sum of squares homogeneity blockmodeling, and\cr
+  "ad" - absolute deviations homogeneity blockmodeling.\cr
+  \cr
+The last two options are "shorthand" for specifying \code{approaches="hom"} and  \code{homFun} to either \code{"ss"} or  \code{"ad"}.}
 \item{blocks}{A vector, a list of vectors or an array with names of allowed blocy types. \cr
 \cr
 Only listing of allowed block types (blockmodel is not pre-specified).\cr
@@ -51,13 +56,13 @@ A vector with names of allowed blocktypes. For multi-relational networks, it can
   \code{"dnc"} - do not care block - the error is always zero\cr
   The ordering is important, since if several block types have identical error, the first on the list is selected.\cr\cr
  A pre-specified blockmodel.\cr
- An array with dimensions four dimensions (see example below). The third and the fourth represent the clusters (for rows and columns). The first is as long as the maximum number of allows block types for a given block. If some block has less possible block types, the empty slots should have values \code{NA}. The second dimension is the number of relations (1 for single-relational networks). The values in the array should be the ones from above.}
+ An array with dimensions four dimensions (see example below). The third and the fourth represent the clusters (for rows and columns). The first is as long as the maximum number of allows block types for a given block. If some block has less possible block types, the empty slots should have values \code{NA}. The second dimension is the number of relations (1 for single-relational networks). The values in the array should be the ones from above. The array can have only three dimensions in case of one-relational networks or if the same pre-specified blockmodel is assumed for all relations. Further, it can have only two dimensions, if in addition only one block type is allowed per block.}
 \item{isTwoMode}{\code{1} for one-mode networks and \code{2} for two-mode networks. The default value is set to \code{NULL}.}
 \item{isSym}{Specifying if the matrix (for each relation) is symetric.}
 \item{diag}{Should the special stauts of diagonal be acknowladged. The default value is set to \code{1}.}
-\item{IM}{The obtained image for objects.}
-\item{EM}{Block errors by blocks.}
-\item{Earr}{The array of errors for all allowed block types by next dimensions: allowed block types, relations, row clusters and column clusters. The dimensions should match the dimensions of the block argument if specified as an array.}
+\item{IM}{The obtained image for objects. For debugging purposes only.}
+\item{EM}{Block errors by blocks. For debugging purposes only.}
+\item{Earr}{The array of errors for all allowed block types by next dimensions: allowed block types, relations, row clusters and column clusters. The dimensions should match the dimensions of the block argument if specified as an array. For debugging purposes only.}
 \item{justChange}{Value specifying if only the errors for changed clusters should be computed. Used only for debugging purposes by developers.}
 \item{rowCluChange}{An array holding the two row clusters where the change occured. Used only for debugging purposes by developers.}
 \item{colCluChange}{An array holding the col row clusters where the change occured. Used only for debugging purposes by developers.}
@@ -66,14 +71,14 @@ A vector with names of allowed blocktypes. For multi-relational networks, it can
 \item{homFun}{In case of homogenity blockmodeling two vairability criteria can be used: \code{"ss"} - sum of squares (set by default) and \code{"ad"} -
 absolute deviations.}
 \item{usePreSpecM}{Specifiying weather a pre-specified value should be used when computing inconsistency.}
- \item{preSpecM}{Suficient value for individual cells for valued approach. Can be a number or a character string giving the name of a function. Set to \code{"max"} for implicit approach. For multi-relational networks, it can be a vector of such values. In case ob binary blockmodeling this argument is a threshold used for binerizing the network. Therefore all values with values lower than \code{preSpecM} are recoded into 0s, all other into 1s. For multi-relational networks, it can be a vector of such values.}
+ \item{preSpecM}{Suficient value for individual cells for valued approach. Can be a number or a character string giving the name of a function. Set to \code{"max"} for implicit approach. For multi-relational networks, it can be a vector of such values. In case ob binary blockmodeling this argument is a threshold used for binerizing the network. Therefore all values with values lower than \code{preSpecM} are recoded into 0s, all other into 1s. For multi-relational networks, it can be a vector of such values. In case of pre-specified blockmodeling, it can have the same dimensions as \code{blocks}.}
 \item{save.initial.param}{Should the inital parameters (\code{approaches}, ...) be saved. The default value is \code{TRUE}.}
 \item{relWeights}{Weights for all type of relations in a blockmodel. The default value is set to \code{1}.}
-\item{posWeights}{Weigths for positions in the blockmodel (the dimensions must be the same as the error matrix). For now this is a matix (two-dimensional) even for multi-relational networks.}
-\item{blockTypeWeights}{Weights for each type of block used, if they are to be different accros block types (see \code{blocks} above). It must be suplied in form of a named vetor. The default value is set to \code{1}.}
-\item{combWeights}{Weights for all type of block used, The default value is set to \code{NULL}.}
+\item{posWeights}{Weigths for positions in the blockmodel (the dimensions must be the same as the error matrix (rows, columns)). For now this is a matix (two-dimensional) even for multi-relational networks.}
+\item{blockTypeWeights}{Weights for each type of block used, if they are to be different accros block types (see \code{blocks} above). It must be suplied in form of a named vetor, where the names are one or all allowed block types from \code{blocks}. If only some block types are specified, the other have a default weight of 1. The default value is set to \code{1}.}
+\item{combWeights}{Weights for all type of block used, The default value is set to \code{NULL}.The dimension must be the same as \code{blocks}, if \code{blocks} would be specified in array format (which is usual in pre-specified case).}
 \item{returnEnv}{Should the function also return the environment after its completion.}
-\item{useMulti}{Which version of local search should be used. The default value is set to \code{FALSE}. If \code{FALSE}, first possible all moves in random order and then all possible exchanges in random order are tired. When a move with lower value of criterion function is found, the algorithm moves to this new partition. If TRUE the version of local search where all possible moves and exchanges are tired first and then the one with the lowest error is selected and used. In this case, several optimal partitions are found. \code{maxPar} best partitions are returned.}
+\item{useMulti}{Which version of local search should be used. The default value is set to \code{FALSE}. If \code{FALSE}, first possible all moves in random order and then all possible exchanges in random order are tired. When a move with lower value of criterion function is found, the algorithm moves to this new partition. If \code{TRUE} the version of local search where all possible moves and exchanges are tired first and then the one with the lowest error is selected and used. In this case, several optimal partitions are found. \code{maxPar} best partitions are returned.}
 \item{maxPar}{The number of partitions with optimal criterion fuction to be returned. Only used If \code{useMulti} is \code{TRUE}.}
 \item{nMode}{Number of nodes. If \code{NULL}, then determined from \code{clu}.}
 \item{minUnitsRowCluster}{Minimum number of units in row cluster.}
@@ -86,14 +91,27 @@ absolute deviations.}
 %\details{
 %}
 \value{
-  A list:
+
+ \code{critFunC} returns a list containing:
   \item{M}{The matrix of the network analyzed.}
   \item{err}{The error or inconsistency emplirical network with the ideal network for a given blockmodel (model, approach,...) and paritition.}
   \item{clu}{The analyzed partition.}
   \item{EM}{Block errors by blocks.}
   \item{IM}{The obtained image for objects.}
   \item{BM}{Block means by block - only for Homogeneity blockmodeling.}
+  \item{Earr}{The array of errors for all allowed block types by next dimensions: allowed block types, relations, row clusters and column clusters. The dimensions should match the dimensions of the block argument if specified as an array.}\cr
+   \code{optParC} returns a list containing:
+    \item{M}{The matrix of the network analyzed.}
+  \item{err}{The error or inconsistency emplirical network with the ideal network for a given blockmodel (model, approach,...) and paritition.}
+  \item{clu}{The analyzed partition.}
+  \item{EM}{Block errors by blocks.}
+  \item{IM}{The obtained image for objects.}
+  \item{BM}{Block means by block - only for Homogeneity blockmodeling.}
   \item{Earr}{The array of errors for all allowed block types by next dimensions: allowed block types, relations, row clusters and column clusters. The dimensions should match the dimensions of the block argument if specified as an array.}
+  \item{useMulti}{The value of the input paramter \code{useMulti}.}
+  \item{bestRowParMatrix}{(If \code{useMulti = TRUE}) Matrix, where there are different solutions for columns, where rows represent units.}
+   \item{sameErr}{The number of partitions with the minimum value of the criterion function.}
+   
 }
 \references{
 Doreian, P., Batagelj, V., & Ferligoj, A. (2005). Generalized blockmodeling, (Structural analysis in the social sciences, 25). Cambridge [etc.]: Cambridge University Press.
@@ -123,7 +141,7 @@ net[clu == 2, clu == 2] <- rnorm(n = tclu[2] * tclu[2], mean = 0, sd = 1)
 
 # Computation of criterion function with the correct partition
 res <- critFunC(M = net, clu = clu, approaches = "hom", homFun = "ss", blocks = "com")
-res$err # The error is relativly small
+res$err # The error is relatively small
 res$BM  # The block means are around 0 or 4
 plot(res)
 
@@ -136,7 +154,7 @@ B[1, 1, , ] <- "nul"
 B[1, 1, 1, 2] <- "com"
 B[1, 1, , ]
 res <- critFunC(M = net, clu = clu, approaches = "hom", homFun = "ss", blocks = B)
-res$err # The error is relativly small
+res$err # The error is relatively small
 res$IM 
 plot(res)
 
@@ -149,7 +167,7 @@ B <- array(NA, dim = c(2, 2, 2))
 B[1, , ] <- "nul"
 B[2, 1, 2] <- "com"
 res <- critFunC(M = net, clu = clu, approaches = "hom", homFun = "ss", blocks = B)
-res$err # The error is relativly small
+res$err # The error is relatively small
 res$IM 
 plot(res)
 
@@ -168,7 +186,7 @@ net[net < 0] <- 0
 # Computation of criterion function with the correct partition
 res <- critFunC(M = net, clu = clu, approaches = "val", 
 blocks = c("nul", "com"), preSpecM = 4)
-res$err # The error is relativly small
+res$err # The error is relatively small
 res$IM 
 # The image corresponds to the one used for generation of
 # The network

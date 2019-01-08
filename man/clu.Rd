@@ -2,6 +2,7 @@
 \alias{clu}
 \alias{partitions}
 \alias{IM}
+\alias{EM}
 \alias{err}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Function for extraction of some elements for objects, returend by functions for Generalized blockmodeling}
@@ -10,14 +11,16 @@ Function for extraction of clu (partition), all best clus (partitions), IM (imag
 
 \usage{
 clu(res, which = 1, ...)
-IM(res, which = 1, ...)
+IM(res, which = 1, drop=TRUE, ...)
+EM(res, which = 1, drop=TRUE, ...)
 err(res, ...)
 partitions(res)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{res}{Result of function \code{\link{critFunC}} or \code{\link{optRandomParC}}.}
-  \item{which}{From which (if there are more than one) "best" solution should the element be extracted. Warning! \code{which} grater than the number of "best" partitions produces an error.}
+  \item{which}{From \code{which} (if there are more than one) "best" solution should the element be extracted. Warning! \code{which} grater than the number of "best" partitions produces an error.}
+  \item{drop}{If \code{TRUE} (default), dimensions that have only one level are dropped (\code{drop} function is applied to the final result).}
   \item{\dots}{Not used.}
 }
 \value{
@@ -25,7 +28,7 @@ partitions(res)
 }
 
 \references{
-Doreian, P., Batagelj, V., & Ferligoj, A. \enc{Anuška}{Anuska} (2005). Generalized blockmodeling, (Structural analysis in the social sciences, 25). Cambridge [etc.]: Cambridge University Press.
+Doreian, P., Batagelj, V., & Ferligoj, A. (2005). Generalized blockmodeling, (Structural analysis in the social sciences, 25). Cambridge [etc.]: Cambridge University Press.
 
 \enc{Žiberna, A.}{Ziberna, A.} (2007). Generalized Blockmodeling of Valued Networks. Social Networks, 29(1), 105-126. doi: 10.1016/j.socnet.2006.04.002
 
@@ -35,8 +38,8 @@ Doreian, P., Batagelj, V., & Ferligoj, A. \enc{Anuška}{Anuska} (2005). Generali
 \author{\enc{Aleš Žiberna}{Ales Ziberna}}
 \seealso{\code{\link{critFunC}}, \code{\link{plot.mat}}, \code{\link{optRandomParC}}}
 \examples{
-n <- 8 # If larger, the number of partitions increases dramaticaly,
-       # as does if we increase the number of clusters
+n <- 8 # If larger, the number of partitions increases dramatically,
+# as does if we increase the number of clusters
 net <- matrix(NA, ncol = n, nrow = n)
 clu <- rep(1:2, times = c(3, 5))
 tclu <- table(clu)
@@ -45,7 +48,7 @@ net[clu == 1, clu == 2] <- rnorm(n = tclu[1] * tclu[2], mean = 4, sd = 1)
 net[clu == 2, clu == 1] <- rnorm(n = tclu[2] * tclu[1], mean = 0, sd = 1)
 net[clu == 2, clu == 2] <- rnorm(n = tclu[2] * tclu[2], mean = 0, sd = 1)
 
-# We select a random parition and then optimise it
+# We select a random partition and then optimize it
 all.par <- nkpartitions(n = n, k = length(tclu))
 # Forming the partitions
 all.par <- lapply(apply(all.par, 1, list),function(x) x[[1]])
@@ -57,5 +60,6 @@ plot(res) # Hopefully we get the original partition
 clu(res) # Hopefully we get the original partition
 err(res) # Error
 IM(res) # Image matrix/array.
+EM(res) # Error matrix/array.
 }
 \keyword{manip}% at least one, from doc/KEYWORDS
