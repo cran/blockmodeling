@@ -330,7 +330,7 @@ critFunC<-function(M, clu, approaches, blocks, isTwoMode = NULL, isSym = NULL,
 }
 
 
-optParC<-function(M, clu, approaches, blocks, nMode=NULL,isSym=NULL,diag=1, useMulti=FALSE, maxPar=50, IM=NULL,EM=NULL,Earr=NULL, justChange=FALSE, sameIM=FALSE, regFun="max", homFun = "ss", usePreSpecM = NULL, preSpecM=NULL, minUnitsRowCluster = 1, minUnitsColCluster = 1, maxUnitsRowCluster = 9999, maxUnitsColCluster = 9999, relWeights=1, posWeights=1, blockTypeWeights=1,combWeights=NULL, exchageClusters="all",save.initial.param=TRUE){
+optParC<-function(M, clu, approaches, blocks, nMode=NULL,isSym=NULL,diag=1, useMulti=FALSE, maxPar=50, IM=NULL,EM=NULL,Earr=NULL, justChange=TRUE, sameIM=FALSE, regFun="max", homFun = "ss", usePreSpecM = NULL, preSpecM=NULL, minUnitsRowCluster = 1, minUnitsColCluster = 1, maxUnitsRowCluster = 9999, maxUnitsColCluster = 9999, relWeights=1, posWeights=1, blockTypeWeights=1,combWeights=NULL, exchageClusters="all",save.initial.param=TRUE){
 
     if(save.initial.param){
         initial.param<-list(initial.param=tryCatch(lapply(as.list(sys.frame(sys.nframe())),eval),error=function(...)return("error")))   #saves the inital parameters
@@ -773,13 +773,14 @@ nCores=1, #number of cores to be used 0 -means all available cores, can also be 
    } else {
      requireNamespace("doParallel")
      requireNamespace("doRNG")
-        if(!getDoParRegistered()){
+     `%dorng%`<-doRNG::`%dorng%`
+        if(!foreach::getDoParRegistered()){
             if(nCores==0){
                 nCores<-detectCores()-1                    
             }
-            registerDoParallel(nCores)
+            doParallel::registerDoParallel(nCores)
         }
-        nC<-getDoParWorkers()
+        nC<-foreach::getDoParWorkers()
         oneRep<-function(i,M,approaches, blocks, n,k,mingr,maxgr,addParam,rep,nC,...){
             if(printRep) cat("\n\nStarting optimization of the partiton",i,"of",rep,"partitions.\n")
             temppar<-parGenFun(n=n,k=k,mingr=mingr,maxgr=maxgr,addParam=addParam)
