@@ -1,4 +1,116 @@
-"plot.mat" <- plotMat <- 
+#' @encoding UTF-8
+#' @title Functions for plotting a partitioned matrix (representing the network)
+#' 
+#' @description
+#' The main function \code{plot.mat} or \code{plotMat} plots a (optionally partitioned) matrix.
+#' If the matrix is partitioned, the rows and columns of the matrix are rearranged according to the partitions.
+#' Other functions are only wrappers for \code{plot.mat} or \code{plotMat} for convenience when plotting the results of the corresponding functions.
+#' The \code{plotMatNm} plots two matrices based on M, normalized by rows and columns, next to each other. The \code{plot.array} or \code{plotArray} plots an array. \code{plot.mat.nm} has been replaced by \code{plotMatNm}.
+#'
+#' @param x A result from a corresponding function or a matrix or similar object representing a network.
+#' @param M A matrix or similar object representing a network - either \code{x} or \code{M} must be supplied - both are here to make the code compatible with generic and with older functions.
+#' @param clu A partition. Each unique value represents one cluster. If the network is one-mode,
+#' then this should be a vector, else a list of vectors, one for each mode.
+#' @param ylab Label for y axis.
+#' @param xlab Label for x axis.
+#' @param main Main title.
+#' @param print.val Should the values be printed in the matrix.
+#' @param print.0 If \code{print.val = TRUE} Should the 0s be printed in the matrix.
+#' @param plot.legend Should the legend for shades be plotted.
+#' @param print.legend.val Should the values be printed in the legend.
+#' @param print.digits.legend The number of digits that should appear in the legend.
+#' @param print.digits.cells The number of digits that should appear in the cells (of the matrix and/or legend).
+#' @param print.cells.mf If not \code{NULL}, the above argument is ignored, the cell values are printed as the cell are multiplied by this factor and rounded.
+#' @param outer.title Should the title be printed on the 'inner' or 'outer' margin of the plot, default is 'inner' margin.
+#' @param title.line The line (from the top) where the title should be printed. The suitable values depend heavily on the displayed type.
+#' @param mar A numerical vector of the form \code{c(bottom, left, top, right)} which gives the lines of margin to be specified on the four sides of the plot.
+#' The R default for ordinary  plots is \code{c(5, 4, 4, 2) + 0.1}, while this function default is \code{c(0.5, 7, 8.5, 0) + 0.1}.
+#' @param cex.val The size of the values printed. The default is \code{10 / 'number of units'}.
+#' @param val.y.coor.cor Correction for centering the values in the squares in y direction.
+#' @param val.x.coor.cor Correction for centering the values in the squares in x direction.
+#' @param cex.legend Size of the text in the legend.
+#' @param legend.title The title of the legend.
+#' @param cex.axes Size of the characters in axes. Default makes the cex so small that all categories can be printed.
+#' @param print.axes.val Should the axes values be printed. Default prints each axis if \code{rownames} or \code{colnames} is not \code{NULL}.
+#' @param print.x.axis.val Should the x axis values be printed. Default prints each axis if \code{rownames} or \code{colnames} is not \code{NULL}.
+#' @param print.y.axis.val Should the y axis values be printed. Default prints each axis if \code{rownames} or \code{colnames} is not \code{NULL}.
+#' @param x.axis.val.pos The x coordinate of the y axis values.
+#' @param y.axis.val.pos The y coordinate of the x axis values.
+#' @param cex.main Size of the text in the main title.
+#' @param cex.lab Size of the text in matrix.
+#' @param yaxis.line The position of the y axis (the argument 'line').
+#' @param xaxis.line The position of the x axis (the argument 'line').
+#' @param legend.left How much left should the legend be from the matrix.
+#' @param legend.up How much up should the legend be from the matrix.
+#' @param legend.size Relative legend size.
+#' @param legend.text.hor.pos Horizontal position of the legend text (bottom) - 0 = bottom, 0.5 = middle,...
+#' @param par.line.width The width of the line that separates  the partitions.
+#' @param par.line.col The color of the line that separates the partitions.
+#' @param IM.dens The density of shading lines in each block.
+#' @param IM The image (as obtained  with \code{critFunC}) of the blockmodel. \code{dens.leg} is used to translate this image into \code{IM.dens}.
+#' @param wnet Specifies which matrix (if more) should be plotted  - used if \code{M} is an array.
+#' @param wIM Specifies which \code{IM} (if more) should be used for plotting. The default value is set to \code{wnet}) - used if \code{IM} is an array.
+#' @param use.IM Specifies if \code{IM} should be used for plotting.
+#' @param dens.leg It is used to translate the \code{IM} into \code{IM.dens}.
+#' @param blackdens At which density should the values on dark colors  of lines be printed in white.
+#' @param plotLines Should the lines in the matrix be printed. The default value is set to \code{FALSE}, best set to \code{TRUE} for very small networks.
+#' @param frameMatrix Should the matrix be framed (if \code{plotLines} is \code{FALSE}). The default value is set to \code{TRUE}.
+#' @param x0ParLine Coordinates for lines separating clusters.
+#' @param x1ParLine Coordinates for lines separating clusters.
+#' @param y0ParLine Coordinates for lines separating clusters.
+#' @param y1ParLine Coordinates for lines separating clusters.
+#' @param colByUnits Coloring units. It should be a vector of unit length.
+#' @param colByRow Coloring units by rows. It should be a vector of unit length.
+#' @param colByCol Coloring units by columns. It should be a vector of unit length.
+#' @param mulCol Multiply color when joining with row, column. Only used when when \code{colByUnits} is not \code{NULL}.
+#' @param joinColOperator Function to join \code{colByRow} and \code{colByCol}. The default value is set to \code{"+"}.
+#' @param colTies If \code{TRUE}, ties are colored, if \code{FALSE}, 0-ties are colored.
+#' @param maxValPlot The value to use as a maximum when computing colors (ties with maximal positive value are plotted  as black).
+#' @param printMultipliedMessage Should the message '* all values in cells were multiplied by' be printed on the plot. The default value is set to \code{TRUE}.
+#' @param replaceNAdiagWith0 If \code{replaceNAdiagWith0 = TRUE} Should the \code{NA} values on the diagonal of a matrix be replaced with 0s.
+#' @param title.row Title for the row-normalized matrix in nm version
+#' @param title.col Title for the column-normalized matrix in nm version
+#' @param par.set A list of possible plotting parameters (to \code{par}) to be used in nm version
+#' @param which Which (if there are more than one) of optimal solutions to plot.
+#' @param colLabels Should the labels of units be colored. If \code{FALSE}, these are not collored, if \code{TRUE}, they are colored with colors of clusters as defined by palette.
+#' This can be aslo a vector of colors (or integers) for one-mode networks or a list of two such vectors for two-mode networks.
+#' @param \dots Aditional arguments to \code{plot.default} for \code{plotMat} and also to \code{plotMat} for other functions. 
+#'
+#' @return The functions are used for their side effect - plotting.
+#' 
+#' @references \enc{Žiberna, A.}{Ziberna, A.} (2007). Generalized Blockmodeling of Valued Networks. Social Networks, 29(1), 105-126. doi: 10.1016/j.socnet.2006.04.002
+#' 
+#' \enc{Žiberna, A.}{Ziberna, A.} (2008). Direct and indirect approaches to blockmodeling of valued networks in terms of regular equivalence. Journal of Mathematical Sociology, 32(1), 57-84. doi: 10.1080/00222500701790207
+#' 
+#' @author \enc{Aleš Žiberna}{Ales Ziberna}
+#' @seealso \code{\link{critFunC}}, \code{\link{optRandomParC}}
+#' @keywords graphs hplot
+#' 
+#' @examples
+#' # Generation of the network
+#' n <- 20
+#' net <- matrix(NA, ncol = n, nrow = n)
+#' clu <- rep(1:2, times = c(5, 15))
+#' tclu <- table(clu)
+#' net[clu == 1, clu == 1] <- rnorm(n = tclu[1] * tclu[1], mean = 0, sd = 1)
+#' net[clu == 1, clu == 2] <- rnorm(n = tclu[1] * tclu[2], mean = 4, sd = 1)
+#' net[clu == 2, clu == 1] <- rnorm(n = tclu[2] * tclu[1], mean = 0, sd = 1)
+#' net[clu == 2, clu == 2] <- rnorm(n = tclu[2] * tclu[2], mean = 0, sd = 1)
+#' 
+#' # Ploting the network
+#' plotMat(M = net, clu = clu, print.digits.cells = 3)
+#' class(net) <- "mat"
+#' plot(net, clu = clu)
+#' # See corresponding functions for examples for other ploting
+#' # functions
+#' # presented, that are essentially only the wrappers for "plot.max"
+#' @import Matrix
+#' @import methods
+#' @importFrom grDevices gray
+#' @importFrom graphics mtext par plot.default rect segments text title
+#' 
+#' @export
+ plotMat <- 
 function(
     x=M, #x should be a matrix or similar object
     M=x, #M should be a matrix or similar object - both (x and M) are here to make the code compatible with generic plot and with older versions of plot.mat and possbily some other functions in the package
@@ -292,8 +404,8 @@ function(
         max.aM<-max(aM)
         aMnorm<-as.vector(aM)/max.aM
         if(max.aM!=0){
-            col<-grey(1-aMnorm)   #definin the color of rectangules
-        }else col<-matrix(grey(1),nrow=dm[1],ncol=dm[2])
+            col<-gray(1-aMnorm)   #definin the color of rectangules
+        }else col<-matrix(gray(1),nrow=dm[1],ncol=dm[2])
         col[M<0]<-paste("#FF",substr(col[M<0],start=4,stop=7),sep="")
     }
 
@@ -417,6 +529,13 @@ function(
 }
 
 
+#' @rdname plotMat
+#'
+#' @param main.title Main title in \code{plot.array} version.
+#' @param main.title.line The line in which main title is printed in \code{plot.array} version.
+#' @param mfrow \code{mfrow} Argument to \code{par} - number of row and column plots to be plotted on one figure.
+#' 
+#' @export
 "plot.array" <- plotArray <- 
 function(
     x=M, #x should be a matrix or similar object
@@ -460,5 +579,10 @@ function(
     title(main=main.title,outer=TRUE,line=main.title.line)
     par(par.def)
 }
+
+#' @rdname plotMat
+#' @export plot.mat
+#' @export
+plot.mat <- plotMat
 
 

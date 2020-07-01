@@ -1,3 +1,4 @@
+#' @export
 "plot.check.these.par" <-
 function(
 	x,	#an "check.these.par" class object
@@ -12,4 +13,3 @@ function(
 	}
 	plot.mat(x$M,clu=x$best[[which]]$clu,IM=x$best[[which]]$IM,main=main,...)
 }
-

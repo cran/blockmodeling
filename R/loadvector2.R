@@ -1,3 +1,11 @@
+#' @rdname Pajek
+#' 
+#' @description \code{loadvector2} - The same as above, but adapted to be called within \code{loadpajek} - as a consequence not suited for reading clusters.
+#' @importFrom utils read.table
+#' 
+#' @export
+
+
 "loadvector2" <-
 structure(function(filename){
   if(is.character(filename)) {file<-file(description=filename,open="r")

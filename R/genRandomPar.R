@@ -1,3 +1,27 @@
+#' The function for generating random partitions
+#' 
+#' The function generates random partitions. The function is meant to be called by the function \code{\link{optRandomParC}.}
+#' 
+# #' @usage genRandomPar(k, n, seed = NULL, mingr = 1, maxgr = Inf,
+# #' addParam = list(genPajekPar = TRUE, probGenMech = NULL))
+#'
+#' @param k Number of clusters (by modes).
+#' @param n Number of units (by modes).
+#' @param seed Seed for generating random numbers (partitions).
+#' @param mingr Minimal allowed group size.
+#' @param maxgr Maximal allowed group size.
+#' @param addParam This has to be a list with the following parameters (any or all can be missing, then the default values (see usage) are used):\cr
+#' "genPajekPar" - Should the partitions be generated as in Pajek (Batagelj & Mrvar, 2006). If \code{FALSE}, all partitions are selected completely at random while making sure that the partitions have the required number of clusters. \cr
+#' \code{probGenMech} - Here the probabilities for 4 different generating mechanisms can be specified. If this is not specified, the value is set to \code{c(1/3, 1/3, 1/3, 0)} if \code{genPajekPar} is \code{TRUE} and to \code{c(0, 0, 0, 1)} if \code{genPajekPar} is \code{FALSE}. The first 3 mechanisms are the same as implemented in Pajek (the second one has almost all units in only one cluster) and the fourth is completely random (from uniform distribution).
+#'
+#' @return A random partition in the format required by \code{\link{optRandomParC}}. If a network has several modes, then a list of partitions, one for each mode.
+#'
+#' @references Batagelj, V., & Mrvar, A. (2006). Pajek 1.11. Retrieved from \url{http://vlado.fmf.uni-lj.si/pub/networks/pajek/}
+#' @author \enc{Aleš Žiberna}{Ales Ziberna}
+#' @keywords cluster
+#' 
+#' @export
+
 "genRandomPar" <-
 function(
 k,#number of clusters/groups

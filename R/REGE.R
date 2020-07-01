@@ -1,3 +1,71 @@
+#' @encoding UTF-8
+#' @title REGE - Algorithms for compiting (dis)similarities in terms of regular equivalnece
+#' 
+#' @description
+#' REGE - Algorithms for compiting (dis)similarities in terms of regular equivalnece (White & Reitz, 1983). 
+#' \code{REGE, REGE.for} - Classical REGE or REGGE, as also implemented in Ucinet. Similarities in terms of regular equivalence are computed.  The \code{REGE.for} is a wrapper for calling the FORTRAN subrutine written by White (1985a), modified to be called by R. The \code{REGE} does the same, however it is written in R. The functions with and without ".for" differ only in whether they are implemented  in R of FORTRAN. Needless to say, the functions implemented in FORTRAN are much faster.
+#' \code{REGE.ow, REGE.ow.for} - The above function, modified so that a best match is searched for each arc separately (and not for both arcs, if they exist, together). 
+#' \code{REGE.nm.for} - REGE or REGGE, modified to use row and column normalized matrices instead of the original matrix.
+#' \code{REGE.ownm.for} - The above function, modified so that a best match for an outgoing ties is searched on row-normalized network and for incoming ties on column-normalized network.
+#' \code{REGD.for} - REGD or REGDI, a dissimilarity version of the classical REGE or REGGE. Dissimilarities in terms of regular equivalence  are computed.  The \code{REGD.for} is a wrapper for calling the FORTRAN subroutine written by White (1985b), modified to be called by R.
+#' \code{REGE.FC}  - Actually an earlier version of REGE. The difference is in the denominator. See Žiberna (2007) for details.
+#' \code{REGE.FC.ow} - The above function, modified so that a best match is searched for each arc separately (and not for both arcs, if they exist, together).
+#' other - still in testing stage.
+#' 
+#' @param M Matrix or a 3 dimensional array representing the network. The third dimension allows for several relations to be analyzed.
+#' @param E Initial (dis)similarity in terms of regular equivalnece.
+#' @param iter The desired number of iterations.
+#' @param until.change Should the iterations be stopped when no change occurs.
+#' @param use.diag Should the diagonal be used. If \code{FALSE}, all diagonal elements are set to 0.
+#' @param normE Should the equivalence matrix be normalized after each iteration.
+#'
+#' @return
+#'   \item{E}{A matrix of (dis)similarities in terms of regular equivalnece.}
+#'   \item{Eall}{An array of (dis)similarity matrices in terms of regular equivalence, each third dimension represets one iteration. For ".for" functions, only the initial and the final (dis)similarities are returned.}
+#'   \item{M}{Matrix or a 3 dimensional array representing the network used in the call.}
+#'   \item{iter}{The desired number of iterations.}
+#'   \item{use.diag}{Should the diagonal be used - for functions implemented in R only.}
+#'   ...
+#'   
+#' @references
+#' \enc{Žiberna, A.}{Ziberna, A.} (2008). Direct and indirect approaches to blockmodeling of valued networks in terms of regular equivalence. Journal of Mathematical Sociology, 32(1), 57-84. doi: 10.1080/00222500701790207
+#' 
+#' White, D. R., & Reitz, K. P. (1983). Graph and semigroup homomorphisms on networks of relations. Social Networks, 5(2), 193-234.
+#'
+#' White, D. R.(1985a). DOUG WHITE'S REGULAR EQUIVALENCE PROGRAM. Retrieved from http://eclectic.ss.uci.edu/~drwhite/REGGE/REGGE.FOR
+#'
+#' White, D. R. (1985b). DOUG WHITE'S REGULAR DISTANCES PROGRAM. Retrieved from http://eclectic.ss.uci.edu/~drwhite/REGGE/REGDI.FOR
+#'
+#' White, D. R. (2005). REGGE. Retrieved from http://eclectic.ss.uci.edu/~drwhite/REGGE/
+#' 
+#'  #' @author \enc{Aleš Žiberna}{Ales Ziberna} based on Douglas R. White's original REGE and REGD
+#' @seealso \code{\link{sedist}}, \code{\link{critFunC}}, \code{\link{optParC}}, \code{\link{plot.mat}}
+#'
+#' @examples
+#' n <- 20
+#' net <- matrix(NA, ncol = n, nrow = n)
+#' clu <- rep(1:2, times = c(5, 15))
+#' tclu <- table(clu)
+#' net[clu == 1, clu == 1] <- 0
+#' net[clu == 1, clu == 2] <- rnorm(n = tclu[1] * tclu[2], mean = 4, sd = 1) * sample(c(0, 1),
+#'    size = tclu[1] * tclu[2], replace = TRUE, prob = c(3/5, 2/5))
+#' net[clu == 2, clu == 1] <- 0
+#' net[clu == 2, clu == 2] <- 0
+#'
+#' D <- REGE.for(M = net)$E # Any other REGE function can be used
+#' plot.mat(net, clu = cutree(hclust(d = as.dist(1 - D), method = "ward.D"),
+#'    k = 2))
+#' # REGE returns similarities, which have to be converted to
+#' # disimilarities
+#'
+#' res <- optRandomParC(M = net, k = 2, rep = 10, approaches = "hom", homFun = "ss", blocks = "reg")
+#' plot(res) # Hopefully we get the original partition
+#' 
+#' @keywords cluster graphs 
+#' @importFrom stats as.dist
+#' 
+#' @export
+ 
 "REGE" <-
 function(M,E=1,iter=3,until.change=TRUE,use.diag=TRUE){
 	n<-dim(M)[1]

@@ -1,3 +1,36 @@
+#' Functions for loading and writing Pajek files
+#' 
+#' Functions for reading/loading and writing Pajek files:
+#' 
+#' 
+#' @name Pajek
+NULL
+
+
+#' @rdname Pajek
+#' @description \code{loadnetwork} - Loads a Pajek ".net" filename as a matrix. For now, only simple one and two-mode networks are supported (eg. only single relations, no time information).
+#' 
+#' @aliases Pajek loadnetwork loadnetwork2 loadnetwork3 loadnetwork4 savevector savenetwork savematrix loadmatrix loadvector loadvector2 loadpajek
+#'
+#' @param filename The name of the file to be loaded or saved to or an open file object.
+#' @param useSparseMatrix Should a sparse matrix be use instead of the ordinary one? Sparse matrices can only be used if package Matrix is installed. The default \code{NULL} uses sparse matrices  for networks with more that \code{minN} vertices.
+#' @param minN The minimal number of units in the network to use sparse matrices.
+#'
+#' @return NULL, a matrix or a vector (see Description).
+#'
+#' @references 
+#' Batagelj, V., & Mrvar. A. (1999). Pajek - Program for Large Network Analysis. Retrieved from \url{http://vlado.fmf.uni-lj.si/pub/networks/pajek/}.
+#' 
+#' de Nooy, W., Mrvar, A., & Batagelj. V. (2005). Exploratory Social Network Analysis with Pajek. London: SAGE Publications.
+#' 
+#' @author Vladimir Batagelj & Andrej Mrvar (most functions), \enc{Aleš Žiberna}{Ales Ziberna} (\code{loadnetwork}, \code{loadpajek} and modification of others)
+#' @seealso \code{\link{plot.mat}}, \code{\link{critFunC}}, \code{\link{optRandomParC}}
+#' @keywords graphs file
+#' @import Matrix
+#' @importFrom utils read.table
+#' 
+#' @export
+
 "loadnetwork" <-
 function(filename,useSparseMatrix=NULL,minN=50){
   trim.trailing <- function (x) sub("\\s+$", "", x)

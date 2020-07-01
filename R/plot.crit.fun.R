@@ -1,6 +1,8 @@
-"plot.crit.fun" <-
+#' @rdname plotMat
+#' @export
+"plot.critFun" <-
 function(
-	x,#an "crit.fun" class object
+	x,#an "critFun" class object
 	main=NULL,
 	...	#aditional parameters to "plot.mat"
 ){
@@ -8,3 +10,8 @@ function(
 	plot.mat(x$M,clu=x$clu,IM=x$IM,main=main,...)
 }
 
+
+#' @rdname plotMat
+#' @method plot crit.fun
+#' @export
+plot.crit.fun<-plot.critFun

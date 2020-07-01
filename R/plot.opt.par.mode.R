@@ -1,6 +1,8 @@
-"plot.opt.par.mode" <-
+#' @rdname plotMat
+#' @export
+"plot.optParMode" <-
 function(
-	x,#an "opt.par.mode" class object
+	x,#an "optParMode" class object
 	main=NULL,
 	which=1,	#which (if there are more than one) of optimal solutions to plot
 	...	#aditional parameters to "plot.mat"
@@ -13,3 +15,7 @@ function(
 	plot.mat(x$M,clu=x$best[[which]]$clu,IM=x$best[[which]]$IM,main=main,...)
 }
 
+#' @rdname plotMat
+#' @method plot opt.par.mode
+#' @export
+plot.opt.par.mode<-plot.optParMode

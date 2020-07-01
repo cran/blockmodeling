@@ -1,3 +1,11 @@
+#' @rdname Pajek
+#' 
+#' @description \code{loadmatrix} - Loads a Pajek ".mat" filename as a matrix.
+#'
+#' @importFrom utils read.table
+#' 
+#' @export
+
 "loadmatrix" <-
 structure(function(filename){
   if(is.character(filename)) {file<-file(description=filename,open="r")

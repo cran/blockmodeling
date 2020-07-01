@@ -1,3 +1,15 @@
+#' @rdname Pajek
+#' 
+#' @description \code{savenetwork} - Saves a matrix into a  Pajek ".net" filename.
+#'
+#' @param n A matrix representing the network.
+#' @param twomode 1 for one-mode networks and 2 for two-mode networks. Default sets the argument to 1 for square matrices and to 2 for others.
+#' @param symetric If \code{TRUE}, only the lower part of the matrix is used and the values are interpreted as "Edges", not "Arcs".
+#' @import Matrix
+#' @importFrom utils write.table
+#' 
+#' @export
+
 "savenetwork" <-
 structure(function(n,filename,twomode="default",symetric=NULL){
 	if(length(grep(pattern="w32",x=version["os"]))){

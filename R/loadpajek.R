@@ -1,3 +1,9 @@
+#' @rdname Pajek
+#' 
+#' @description \code{loadpajek} - Loads a Pajek project file name (".paj") as a list with the following components: Networks, Partitions, Vectors and Clusters. Clusters and hierarchies are dismissed.
+#' 
+#' @export
+
 loadpajek<-function(filename){
 	if(is.character(filename)) {file<-file(description=filename,open="r")
 	}else file<-filename
