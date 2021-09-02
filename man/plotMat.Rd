@@ -16,7 +16,7 @@
 \alias{plot.optParMode}
 \alias{plot.opt.par.mode}
 \alias{plotMat}
-\alias{plot.array}
+\alias{plotArray}
 \alias{plot.mat}
 \title{Functions for plotting a partitioned matrix (representing the network)}
 \usage{
@@ -25,8 +25,8 @@
 \method{plot}{crit.fun}(x, main = NULL, ...)
 
 plotMatNm(
-  x = M,
   M = x,
+  x = M,
   ...,
   main.title = NULL,
   title.row = "Row normalized",
@@ -53,8 +53,9 @@ plotMatNm(
 
 plotMat(
   x = M,
-  M = x,
   clu = NULL,
+  orderClu = FALSE,
+  M = x,
   ylab = "",
   xlab = "",
   main = NULL,
@@ -115,7 +116,7 @@ plotMat(
   ...
 )
 
-\method{plot}{array}(
+plotArray(
   x = M,
   M = x,
   IM = NULL,
@@ -127,8 +128,9 @@ plotMat(
 
 \method{plot}{mat}(
   x = M,
-  M = x,
   clu = NULL,
+  orderClu = FALSE,
+  M = x,
   ylab = "",
   xlab = "",
   main = NULL,
@@ -198,13 +200,13 @@ plotMat(
 
 \item{M}{A matrix or similar object representing a network - either \code{x} or \code{M} must be supplied - both are here to make the code compatible with generic and with older functions.}
 
-\item{main.title}{Main title in \code{plot.array} version.}
+\item{main.title}{Main title in \code{plotArray} version.}
 
 \item{title.row}{Title for the row-normalized matrix in nm version}
 
 \item{title.col}{Title for the column-normalized matrix in nm version}
 
-\item{main.title.line}{The line in which main title is printed in \code{plot.array} version.}
+\item{main.title.line}{The line in which main title is printed in \code{plotArray} version.}
 
 \item{par.set}{A list of possible plotting parameters (to \code{par}) to be used in nm version}
 
@@ -212,6 +214,8 @@ plotMat(
 
 \item{clu}{A partition. Each unique value represents one cluster. If the network is one-mode,
 then this should be a vector, else a list of vectors, one for each mode.}
+
+\item{orderClu}{Should the partition be ordered before plotting. \code{FALSE} by default. If \code{TRUE}, \code{\link{orderClu}} is used (using default arguments) to order the clusters in a partition in "decearsing" (see \code{\link{orderClu}} for interpretation) order.}
 
 \item{ylab}{Label for y axis.}
 
@@ -336,7 +340,7 @@ The functions are used for their side effect - plotting.
 The main function \code{plot.mat} or \code{plotMat} plots a (optionally partitioned) matrix.
 If the matrix is partitioned, the rows and columns of the matrix are rearranged according to the partitions.
 Other functions are only wrappers for \code{plot.mat} or \code{plotMat} for convenience when plotting the results of the corresponding functions.
-The \code{plotMatNm} plots two matrices based on M, normalized by rows and columns, next to each other. The \code{plot.array} or \code{plotArray} plots an array. \code{plot.mat.nm} has been replaced by \code{plotMatNm}.
+The \code{plotMatNm} plots two matrices based on M, normalized by rows and columns, next to each other. The \code{plotArray} plots an array. \code{plot.mat.nm} has been replaced by \code{plotMatNm}.
 }
 \examples{
 # Generation of the network

@@ -1,8 +1,8 @@
 Package: blockmodeling
 Type: Package
 Title: Generalized and Classical Blockmodeling of Valued Networks
-Version: 1.0.0
-Date: 2020-7-1
+Version: 1.0.5
+Date: 2021-08-27
 Imports: stats, methods, Matrix, parallel
 Suggests: sna, doRNG, doParallel, foreach
 Depends: R (>= 2.10)
@@ -17,8 +17,11 @@ Description: This is primarily meant as an implementation of generalized blockmo
  Žiberna (2014)<doi:10.1016/j.socnet.2014.04.002>.
 License: GPL (>= 2)
 Encoding: UTF-8
-RoxygenNote: 7.1.0
-NeedsCompilation: yes
-Packaged: 2020-07-01 10:18:26 UTC; zibernaa
+RoxygenNote: 7.1.1
 Repository: CRAN
-Date/Publication: 2020-07-01 11:40:02 UTC
+Repository/R-Forge/Project: blockmodeling
+Repository/R-Forge/Revision: 345
+Repository/R-Forge/DateTimeStamp: 2021-08-27 12:45:46
+Date/Publication: 2021-09-03 00:10:26 UTC
+NeedsCompilation: yes
+Packaged: 2021-08-27 13:08:29 UTC; rforge

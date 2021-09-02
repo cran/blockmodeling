@@ -1,7 +1,7 @@
 #' @importFrom graphics mtext par plot.default rect segments text title
 #' @rdname plotMat
 #'
-#' @param main.title Main title in \code{plot.array} and \code{plotMatNm} version.
+#' @param main.title Main title in \code{plotMatNm} version.
 #' @param title.row Title for row normalized version in \code{plotMatNm}.
 #' @param title.col Title for column normalized version in \code{plotMatNm}.
 #' @param title.col Title for column normalized version in \code{plotMatNm}.
@@ -10,7 +10,7 @@
 #' 
 #' @export
 plotMatNm <- 
-function(x=M,M=x,...,main.title=NULL,title.row="Row normalized",title.col="Column normalized",main.title.line=-2,par.set=list(mfrow=c(1,2))){
+function(M=x,x=M,...,main.title=NULL,title.row="Row normalized",title.col="Column normalized",main.title.line=-2,par.set=list(mfrow=c(1,2))){
 	if(is.null(main.title)){
 		objName<-deparse(substitute(M))
 		if(objName=="x")objName<-deparse(substitute(x))

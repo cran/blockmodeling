@@ -1,7 +1,37 @@
 Name: blockmodeling
 Title: Generalized and Classical Blockmodeling of Valued Networks
 
+2021
+Date: 2021-08-27
+A "NOTE" in cran checked fixed - nolonger existing web page.
 
+Version: 1.0.5
+Date: 2021-07-26
+Added function for printing of results of optRandomParC.
+Added function for ordering a partition and an option to order a partition before plotting with plotMat or using it in funByBlocks.
+
+Version: 1.0.4
+Date: 2021-07-20
+A bug fixed so that the value of switch.names in optRandomParC should be now set correctly by defaults. This makes sure that in cases where blockmodel is not pre-specified we do not get solutions that differ only in the order of groups.
+Also, functions for findind canonical partition and unique canonical partitions were added. 
+
+Version: 1.0.3
+Date: 2021-06-01
+Utility functions added. Relative fit function added.
+
+2021
+Version: 1.0.2
+Date: 2021-03-24
+Utility functions added.
+
+February 1, 2020
+plot.array removed - only goes by name plotArray.
+Minor bug fixes.
+
+2020
+August 1, 2020
+Version 1.0.1
+Various bugs fixed.
 
 2020
 July 1, 2020

@@ -1,16 +1,17 @@
 #' @encoding UTF-8
 #' @title Optimizing a set of partitions based on the value of a criterion function
 #' 
+#' @description
 #' The function optimizes a set of partitions based on the value of a criterion function  (see \code{\link{critFunC}} for details on the criterion function) for a given network and blockmodel for Generalized blockmodeling (Žiberna, 2007) based on other parameters (see below).
 #' The optimization is done through local optimization, where the neighborhood of a partition includes all partitions that can be obtained by moving one unit from one cluster to another or by exchanging two units (from different clusters).
-#' A list of paritions can or the number of clusters and a number of partitions to generate can be specified (\code{optParC}
+#' The number of clusters and a number of partitions to generate can be specified (\code{optParC}).
 #'
 #' @param k The number of clusters used in the generation of partitions.
 #' @param rep The number of repetitions/different starting partitions to check.
 #' @param save.initial.param.opt Should the inital parameters(\code{approaches}, ...) of using \code{optParC} be saved. The default value is \code{FALSE}.
 #' @param deleteMs Delete networks/matrices from the results of to save space.
 #' @param max.iden Maximum number of results that should be saved (in case there are more than \code{max.iden} results with minimal error, only the first \code{max.iden} will be saved).
-#' @param switch.names Should partitions that only differ in group names be considered equal.
+#' @param switch.names Should partitions that only differ in group names be considered equal. By default it is set to \code{TRUE} if \code{blocks} is either a vector or a list of vectors and to \code{FALSE} otherwise.
 #' @param return.all If \code{FALSE}, solution for only the best (one or more) partition/s is/are returned.
 #' @param return.err Should the error for each optimized partition be returned.
 #' @param seed Optional. The seed for random generation of partitions.
@@ -49,7 +50,7 @@
 #' the number of units and the number of clusters (due to its algorithm). Therefore the analysis
 #' of network with more than 100 units can take a lot of time (from a few hours to a few days).
 #' 
-#' @references Batagelj, V., & Mrvar, A. (2006). Pajek 1.11. Retrieved from \url{http://vlado.fmf.uni-lj.si/pub/networks/pajek/}
+#' @references Batagelj, V., & Mrvar, A. (2006). Pajek 1.11. Retrieved from http://vlado.fmf.uni-lj.si/pub/networks/pajek/
 #' 
 #' Doreian, P., Batagelj, V. & Ferligoj, A. (2005). Generalized blockmodeling, (Structural analysis in the social sciences, 25). Cambridge [etc.]: Cambridge University Press.
 #' 
@@ -60,7 +61,7 @@
 #' \enc{Žiberna, A.}{Ziberna, A.} (2014). Blockmodeling of multilevel networks. Social Networks, 39(1), 46-61. doi: 10.1016/j.socnet.2014.04.002
 #' 
 #' @author \enc{Aleš, Žiberna}{Ales Ziberna}
-#' @seealso \code{\link{critFunC}}
+#' @seealso \code{\link{critFunC}}, \code{\link{IM}}, \code{\link{clu}}, \code{\link{err}}, \code{\link{plot.optMorePar}}
 #' 
 #' @examples
 #' n <- 8 # If larger, the number of partitions increases dramatically
@@ -119,7 +120,9 @@
 ){
   dots<-list(...) #this might not be need - can be removed and all latter occurencies given sufficent testing. Left for now as there is not enought time.
   if(is.null(switch.names)){
-    switch.names<-is.null(blocks)
+    if(is.list(blocks)){
+      switch.names<-all(sapply(blocks,is.vector))
+    } else switch.names<-is.vector(blocks)
   }
   
   if(save.initial.param)initial.param<-c(tryCatch(lapply(as.list(sys.frame(sys.nframe())),eval),error=function(...)return("error")),dots=list(...))#saves the inital parameters

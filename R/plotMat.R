@@ -5,12 +5,13 @@
 #' The main function \code{plot.mat} or \code{plotMat} plots a (optionally partitioned) matrix.
 #' If the matrix is partitioned, the rows and columns of the matrix are rearranged according to the partitions.
 #' Other functions are only wrappers for \code{plot.mat} or \code{plotMat} for convenience when plotting the results of the corresponding functions.
-#' The \code{plotMatNm} plots two matrices based on M, normalized by rows and columns, next to each other. The \code{plot.array} or \code{plotArray} plots an array. \code{plot.mat.nm} has been replaced by \code{plotMatNm}.
+#' The \code{plotMatNm} plots two matrices based on M, normalized by rows and columns, next to each other. The \code{plotArray} plots an array. \code{plot.mat.nm} has been replaced by \code{plotMatNm}.
 #'
 #' @param x A result from a corresponding function or a matrix or similar object representing a network.
-#' @param M A matrix or similar object representing a network - either \code{x} or \code{M} must be supplied - both are here to make the code compatible with generic and with older functions.
 #' @param clu A partition. Each unique value represents one cluster. If the network is one-mode,
 #' then this should be a vector, else a list of vectors, one for each mode.
+#' @param orderClu Should the partition be ordered before plotting. \code{FALSE} by default. If \code{TRUE}, \code{\link{orderClu}} is used (using default arguments) to order the clusters in a partition in "decearsing" (see \code{\link{orderClu}} for interpretation) order.
+#' @param M A matrix or similar object representing a network - either \code{x} or \code{M} must be supplied - both are here to make the code compatible with generic and with older functions.
 #' @param ylab Label for y axis.
 #' @param xlab Label for x axis.
 #' @param main Main title.
@@ -112,9 +113,10 @@
 #' @export
  plotMat <- 
 function(
-    x=M, #x should be a matrix or similar object
-    M=x, #M should be a matrix or similar object - both (x and M) are here to make the code compatible with generic plot and with older versions of plot.mat and possbily some other functions in the package
+   x=M, #x should be a matrix or similar object
     clu=NULL,   #partition
+    orderClu=FALSE, #should the partition be ordered
+    M=x, #M should be a matrix or similar object  - both (x and M) are here to make the code compatible with generic plot and with older versions of plot.mat and possbily some other functions in the package
     ylab="",
     xlab="",
     main=NULL,
@@ -175,18 +177,19 @@ function(
     ... #aditional arguments to plot.default
 ){
     old.mar<-par("mar")
-    if(length(dim(IM))>length(dim(IM))&use.IM){
-        if(is.null(wIM))wIM<-wnet
-        if(is.null(wIM)) wIM<-1
-        if(length(dim(IM))==3) {
-          IM<-IM[wIM,,]
-        } else{
-          warning("IM will not be used for plotting. Cannot be sure how to extract the appropirate part!")
-          use.IM<-FALSE
-        }
+    
+    if(min(dim(M))==1 & is.null(wnet)) wnet<-1
+    if(orderClu) {
+      clu<-orderClu(M, clu=clu)
+      ord<-order(attr(clu,"reorder"))
+      if(!is.null(IM))if(length(dim(IM))==2){
+        IM<-IM[ord,ord]
+      } else if(length(dim(IM))==3){
+        IM<-IM[,ord,ord]
+      } else use.IM<-FALSE
     }
     tempClu<-clu
-	
+    
 
 	
     if(length(dim(M))>2){
@@ -197,8 +200,19 @@ function(
             }else if(relDim==3){
                     M<-M[,,wnet]
             }else stop("More than 2 dimensions where relation dimension can not be determined")
+            
+            if(length(dim(IM))>length(dim(M))&use.IM){
+              if(is.null(wIM))wIM<-wnet
+              if(is.null(wIM)) wIM<-1
+              if(length(dim(IM))==3) {
+                IM<-IM[wIM,,]
+              } else{
+                warning("IM will not be used for plotting. Cannot be sure how to extract the appropirate part!")
+                use.IM<-FALSE
+              }
+            }
         }else{
-            plot.array(M = M,
+            plotArray(M = M,
                 clu=tempClu,    #partition
                 ylab=ylab,
                 xlab=xlab,
@@ -453,7 +467,7 @@ function(
 	}
 	
     if(print.y.axis.val) text(x=y.axis.val.pos, y = (dm[1]:1)/dm[1]-1/dm[1]/2 +val.y.coor.cor,labels = yaxe,cex=cex.y.axis,adj=1, col=colYlabels)
-    if(print.x.axis.val) text(y=x.axis.val.pos, x = (1:dm[2])/dm[2]-1/dm[2]/2 +val.x.coor.cor, srt=90, labels = xaxe, cex=cex.x.axis,adj=0, , col=colXlabels)
+    if(print.x.axis.val) text(y=x.axis.val.pos, x = (1:dm[2])/dm[2]-1/dm[2]/2 +val.x.coor.cor, srt=90, labels = xaxe, cex=cex.x.axis,adj=0, col=colXlabels)
     title(outer=outer.title,ylab=ylab,xlab=xlab,main=main, line=title.line,cex.main=cex.main)
     if(print.val){  #ploting the values in the cells if selected
         norm.val<-as.vector(M)/max(abs(M))
@@ -531,12 +545,12 @@ function(
 
 #' @rdname plotMat
 #'
-#' @param main.title Main title in \code{plot.array} version.
-#' @param main.title.line The line in which main title is printed in \code{plot.array} version.
+#' @param main.title Main title in \code{plotArray} version.
+#' @param main.title.line The line in which main title is printed in \code{plotArray} version.
 #' @param mfrow \code{mfrow} Argument to \code{par} - number of row and column plots to be plotted on one figure.
 #' 
 #' @export
-"plot.array" <- plotArray <- 
+plotArray <- 
 function(
     x=M, #x should be a matrix or similar object
     M=x, #M should be a matrix or similar object - both (x and M) are here to make the code compatible with generic plot and with older versions of plot.mat and possbily some other functions in the package
