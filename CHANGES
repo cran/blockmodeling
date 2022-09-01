@@ -1,9 +1,76 @@
 Name: blockmodeling
 Title: Generalized and Classical Blockmodeling of Valued Networks
 
+2022
+Version: 1.1.3
+Date: 2022-08-30
+Corrected handling of blockmodels with 2 or 3 dimensions when partition had two sets of units.
+Speeded up plotting of sparse matrices.
+
+Version: 1.1.2.9000
+Date: 2022-07-28
+plotMat and all functions calling it (plot.* methods for results of critFunC, optParC and optRandomParC) now plot the lines separating sets/modes of units (if clu is a list) with different color (red) and twice as wide as regular lines. 
+Also several spelling errors corrected in plotMat and co documentation and comments. 
+
+Version: 1.1.1.9001
+Date: 2022-07-25
+A bug fix related to exchangeClusters.
+
+Version: 1.1.1.9000
+Date: 2022-07-25
+Added option to fix some clusters (they are not "optimized" but fixed as they are) + some minor changes (new unlistClu function) and documentation improvements.
+
+Version: 1.1.0.9005
+Date: 2022-07-01
+Some bugs fixed. Some changes to code made to eliminate NOTEs in Rcheck
+
+Version: 1.1.0.9004
+Date: 2022-05-20
+Some bugs in binary stochastic (homogeneity) generalized blockmodeling fixed.
+Some updates to documentation.
+
+Version: 1.1.0.9003
+Date: 2022-05-19
+Binary stochastic (homogeneity) generalized blockmodeling should be fully supported (testing needed).
+
+
+Version: 1.1.0.9002
+Date: 2022-05-11
+Added support for row/column-dominant blocks for binary and valued blockmodeling.
+
+Version: 1.1.0.9001
+Date: 2022-05-05
+Started adding support for stochastic (homogeneity) generalized blockmodeling.
+
+Version: 1.0.10
+Date: 2022-04-01
+A bug in plotMat corrected that caused -Inf "labels"  being plotted instead of values in some cases.
+
+Version: 1.0.9
+Date: 2022-03-23
+A bug in funByBlocks corrected. The function did not officially support multi-relational netowrks, but actually they were supproted, while it was expected that thay were represented with an array, where the first dimmension represented the relation. No this was changed so that the last/third relation represents the relation as it is implemented in in most other functions, e.g. in critFunC and optRandomParC.
+
+Version: 1.0.8
+Date: 2022-02-24
+A line added to print.optMorePar to print a line with the number of solutions with the same error.
+A printed message in optRandomParC corrected (the number of solutions with minimal error).
+"tests" directory added with currently only one file. The plan is to add some tests here, possibly also some automatic. 
+
 2021
+Version: 1.0.7
+Date: 2021-10-21
+A bug in plotMat when using parameter MplotValues (introduced in version 1.0.6) fixed.
+
+Date: 2021-09-22
+An option added to use load-balancing or ordinary parLapply. A bug fixed that could in some cases (when parLapplyLB was used and no random functions were used on the master) lead to an error that ".Random.seed" is not found. A parameter useRegParrallaBackend was added so that already registered parallel backend is only used if explicitly asked for.
+
+Version: 1.0.6
+Date: 2021-09-17
+Changed default parallel backend to foreach --> default is now useParLapply = FALSE. cl argument is now taken into account also if foreach is used.
+plotMat was given an additional parameter MplotValues, where a character matrix of the same dimensions as x/M can be supplied, which values are then printed in cells instead of the values of M.
+
 Date: 2021-08-27
-A "NOTE" in cran checked fixed - nolonger existing web page.
+A "NOTE" in cran checked fixed - no longer existing web page.
 
 Version: 1.0.5
 Date: 2021-07-26
@@ -19,12 +86,11 @@ Version: 1.0.3
 Date: 2021-06-01
 Utility functions added. Relative fit function added.
 
-2021
 Version: 1.0.2
 Date: 2021-03-24
 Utility functions added.
 
-February 1, 2020
+Date: 2021-02-01
 plot.array removed - only goes by name plotArray.
 Minor bug fixes.
 
@@ -33,7 +99,6 @@ August 1, 2020
 Version 1.0.1
 Various bugs fixed.
 
-2020
 July 1, 2020
 Version 1.0.0
 Modified optRandomParC so that packages doRng, doParallel and foreach are not loaded unless explicitly requested.

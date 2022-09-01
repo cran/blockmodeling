@@ -89,7 +89,9 @@ plotMat(
   legend.size = 1/min(dim(M)),
   legend.text.hor.pos = 0.5,
   par.line.width = 3,
+  par.line.width.newSet = par.line.width[1] * 2,
   par.line.col = "blue",
+  par.line.col.newSet = "red",
   IM.dens = NULL,
   IM = NULL,
   wnet = NULL,
@@ -113,6 +115,7 @@ plotMat(
   printMultipliedMessage = TRUE,
   replaceNAdiagWith0 = TRUE,
   colLabels = FALSE,
+  MplotValues = NULL,
   ...
 )
 
@@ -164,7 +167,9 @@ plotArray(
   legend.size = 1/min(dim(M)),
   legend.text.hor.pos = 0.5,
   par.line.width = 3,
+  par.line.width.newSet = par.line.width[1] * 2,
   par.line.col = "blue",
+  par.line.col.newSet = "red",
   IM.dens = NULL,
   IM = NULL,
   wnet = NULL,
@@ -188,6 +193,7 @@ plotArray(
   printMultipliedMessage = TRUE,
   replaceNAdiagWith0 = TRUE,
   colLabels = FALSE,
+  MplotValues = NULL,
   ...
 )
 }
@@ -196,7 +202,7 @@ plotArray(
 
 \item{main}{Main title.}
 
-\item{\dots}{Aditional arguments to \code{plot.default} for \code{plotMat} and also to \code{plotMat} for other functions.}
+\item{\dots}{Additional arguments to \code{plot.default} for \code{plotMat} and also to \code{plotMat} for other functions.}
 
 \item{M}{A matrix or similar object representing a network - either \code{x} or \code{M} must be supplied - both are here to make the code compatible with generic and with older functions.}
 
@@ -213,9 +219,9 @@ plotArray(
 \item{which}{Which (if there are more than one) of optimal solutions to plot.}
 
 \item{clu}{A partition. Each unique value represents one cluster. If the network is one-mode,
-then this should be a vector, else a list of vectors, one for each mode.}
+then this should be a vector, else a list of vectors, one for each mode/set.}
 
-\item{orderClu}{Should the partition be ordered before plotting. \code{FALSE} by default. If \code{TRUE}, \code{\link{orderClu}} is used (using default arguments) to order the clusters in a partition in "decearsing" (see \code{\link{orderClu}} for interpretation) order.}
+\item{orderClu}{Should the partition be ordered before plotting. \code{FALSE} by default. If \code{TRUE}, \code{\link{orderClu}} is used (using default arguments) to order the clusters in a partition in "decreasing" (see \code{\link{orderClu}} for interpretation) order.}
 
 \item{ylab}{Label for y axis.}
 
@@ -282,7 +288,11 @@ The R default for ordinary  plots is \code{c(5, 4, 4, 2) + 0.1}, while this func
 
 \item{par.line.width}{The width of the line that separates  the partitions.}
 
+\item{par.line.width.newSet}{The width of the line that separates  that separates the sets/modes - only used when \code{clu} is a list and \code{par.line.width} has length 1.}
+
 \item{par.line.col}{The color of the line that separates the partitions.}
+
+\item{par.line.col.newSet}{The color of the line that separates  that separates the sets/modes - only used when \code{clu} is a list and \code{par.line.col} has length 1.}
 
 \item{IM.dens}{The density of shading lines in each block.}
 
@@ -328,8 +338,10 @@ The R default for ordinary  plots is \code{c(5, 4, 4, 2) + 0.1}, while this func
 
 \item{replaceNAdiagWith0}{If \code{replaceNAdiagWith0 = TRUE} Should the \code{NA} values on the diagonal of a matrix be replaced with 0s.}
 
-\item{colLabels}{Should the labels of units be colored. If \code{FALSE}, these are not collored, if \code{TRUE}, they are colored with colors of clusters as defined by palette.
-This can be aslo a vector of colors (or integers) for one-mode networks or a list of two such vectors for two-mode networks.}
+\item{colLabels}{Should the labels of units be colored. If \code{FALSE}, these are not colored, if \code{TRUE}, they are colored with colors of clusters as defined by palette.
+This can be also a vector of colors (or integers) for one-mode networks or a list of two such vectors for two-mode networks.}
+
+\item{MplotValues}{A matrix to strings to plot in cells. Only to be used if other values than those in the original matrix (\code{x} or \code{M} arguments) should be used. Defaults to \code{NULL}, in which case the valued from original matrix are plotted (if this is not prevented by some other arguments). Overrides all other arguments that deal with cell values (e.g. \code{print.digits.cells}). Sets \code{print.val} to \code{TRUE} and \code{plot.legend} to \code{FALSE}.}
 
 \item{mfrow}{\code{mfrow} Argument to \code{par} - number of row and column plots to be plotted on one figure.}
 }
