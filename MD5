@@ -1,6 +1,6 @@
-a4f3f1b6ae87238a08d3ebbd2748a8fd *CHANGES
-3bd5814e8d04c05a39db1cfdc4c92a09 *DESCRIPTION
-536c873c555c08bbb5d46bf0a1a5951a *NAMESPACE
+487bc4b725e3a70238a495ebc3071b00 *CHANGES
+9b18ce9fd9ebd7d3b8eb03dee1d62fd3 *DESCRIPTION
+27851ca68515f51b4754ee08cf8ab108 *NAMESPACE
 ff8507bd9618b6be02e60b1401ce8913 *R/REGE.FC.R
 a025fcd4e42cbd697aff9e236ebd6108 *R/REGE.FC.ow.R
 4b7067596debde2af8a8126c732a1d3c *R/REGE.R
@@ -10,9 +10,10 @@ cb44bac947045948198efc883da857a2 *R/RF.R
 0c6e2e3b834e60cdaa830e46d15e8c5a *R/blockmodeling-package.R
 f58d2084fa5b53e126295d6a1d7086eb *R/canClu.R
 e0e29db17709e0362cb20bf48d6e56fc *R/clu.R
-fc4334db69d98fbe04c7152c72928c22 *R/critFunC.R
+d0130c894b3b3d25e36211a43a75994e *R/critFunC.R
 c537707b09cfbdc01b418da6d1124cca *R/critFunCinternalFunctions.R
 0e01dd558ce2ae247c0ccc7a96cb3c59 *R/data.R
+e20144f8a74d37d75d18e4833a99b49b *R/encodeToZeroIndexed.R
 9914bb2f80945661587dcd84b42ec28c *R/expandMat.R
 729af93b09e48b54b9eb30e44e69bf9c *R/find.cut.R
 f44c5daef98800588eb898c6975a4253 *R/find.m.R
@@ -41,6 +42,7 @@ c5c9b0bb964a09c8ca251539ce0b65bc *R/mean.max.row.R
 8c1482a08c3532ee2edd4a33f83c6f47 *R/nkpar.R
 6065b6b656febcc06c46f5e205ab6a4a *R/nkpartitions.R
 9a9d8e02522f0fae0b6229920857ae95 *R/notesBorrowing.R
+021f3b3735c2f326e126f8d83e9768d7 *R/numClust.R
 6726cddb48bfcad4509bb22b72cdf9cf *R/onAttach.R
 05f412bf7f6f1d4ded62acd0ba0f2b8a *R/one2two.R
 c91cb1e5db58e7ae856e128737326144 *R/optRandomParC.R
@@ -68,7 +70,7 @@ f0b7745f2c2fb9ce9e04dee780bd45c2 *R/splitClu.R
 d3d9923fa9e7d400c0eef0df8d6cb07f *R/ss.R
 83f0894ed4e7b2baebc45ce5e4d3ea1a *R/sumpos.R
 3c0470a39c9cfe729b91535a7bc25df4 *R/two2one.R
-0e9a53f878d14eedc74fc8cf7632b4d5 *R/unlistClu.R
+0e43f44ace242d3395285eabefcd849c *R/unlistClu.R
 0a228c1e5008d3be85f42d6082fa73f5 *R/unlistCluInt.R
 cf56197339441d8de415e553dd25c348 *R/useneg.R
 4c2cfa53f258d295e139a924e2208646 *R/usepos.R
@@ -83,7 +85,8 @@ aa03ae102504a12c8ecf07f8dd845079 *man/baker.Rd
 69ce195521750805aad00de2f2937e3d *man/blockmodeling.Rd
 b973434f34a18954f83a959f422149b5 *man/canClu.Rd
 4e553af122608bd708a490b482a8b52b *man/clu.Rd
-5c3b059f353ce41faba95d44ddc385e4 *man/critFunC.Rd
+78b45874efff813e8fc0f29ea4d44e27 *man/critFunC.Rd
+495302e6778c21bf89a1b48466b135bd *man/encodeToZeroIndexed.Rd
 db29c28cb315e5804e5baf94a5a572ce *man/expandMat.Rd
 29846790266e614ca698f794bcbaa07c *man/find.m.Rd
 7175c1a4a9b0e7c3619f78b8343a0724 *man/formatA.Rd
@@ -95,6 +98,7 @@ e3c1b194e6cdaa72a61073461719e23d *man/gplot1.Rd
 6ed92f4642658097455deb97f404ce9f *man/nanRep.Rd
 dabd263af46b75169c380f3ddf015818 *man/nkpartitions.Rd
 632908f874a3f94c368009070a47a047 *man/notesBorrowing.Rd
+a237a379e00f66eebea83af4e9979e5d *man/numClust.Rd
 e21f98ae4db66ff33a07f7fc9e3d8ee1 *man/optRandomParC.Rd
 ab932bd087388397df3201ad8bc29015 *man/orderClu.Rd
 bba13066efd659ef90b0a847cbf7a184 *man/plotMat.Rd
@@ -107,7 +111,7 @@ a932b77d048140b14035850443d0ff94 *man/sedist.Rd
 6b4e2483ff8eba1d3c71831d2607aa4d *man/splitClu.Rd
 9c126c89dce1192749102f48e170863d *man/ss.Rd
 86e7b49bee3781c4267c7e1c943ecd24 *man/two2one.Rd
-fc6283c0c6c0dfc2090a517220fc277e *man/unlistClu.Rd
+8583dc93d3f620db8e3105c0e3a0170a *man/unlistClu.Rd
 3eb0c4720500db4d455ae89aba923eef *man/unlistCluInt.Rd
 ee2ce2302b03b54e732b8dcf736a68ee *src/REGD_NE_R.f90
 384f54d7e9e77d08e7492637b6bcc4c7 *src/REGD_OW_NE_R.f90
@@ -123,6 +127,6 @@ c4144d6d8319d36ad517c9d4c7c09636 *src/REGE_OWNM_DIAG_R.f90
 86e8e8b740c8b2039de9219eac79796a *src/REGE_OW_NE_R.f90
 a963f43557e2b9259be9f9622f8cbf5f *src/REGE_OW_R.f90
 e1002e6867e1bd65194543d3676cd778 *src/REGE_R.f90
-eb840c69d5355e86749503234137994c *src/blockmodelingC.c
+c96719c87cb2b242f183fc1f1fd4cca0 *src/blockmodelingC.c
 d2c9c2cf7c538f8e260fc054bfb1b3c8 *src/init.c
 3532b68b4b601c4fec18d033503e9b99 *tests/tests.R

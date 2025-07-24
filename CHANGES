@@ -1,8 +1,22 @@
 Name: blockmodeling
 Title: Generalized and Classical Blockmodeling of Valued Networks
 
+2025
+Version: 1.1.7
+Date: 2025-07-24
+Added a few utility functions, e.g. to compute the length of partitions.
+
+2024
+Version: 1.1.6
+Date: 2024-12-27
+A bug fix in unlistClu.
+
 
 2023
+Version: 1.1.5.9000
+Date: 2023-09-28
+Added two arguments to optParR, justMove and nImp. justMove if set to TRUE allows only moves, but not also exchanges. nImp is based on Carl's idea to try to find more then one partition before moving to the next one. 
+
 Version: 1.1.5
 Date: 2023-08-23
 Changed citEntry to bibEntry. Changed to short version number for CRAN relese.
