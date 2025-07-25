@@ -91,8 +91,7 @@
 #' @author \enc{Aleš Žiberna}{Ales Ziberna}
 #' @seealso \code{\link{optRandomParC}}, \code{\link{critFunC}}, \code{\link{optParC}}, \code{\link{IM}}, \code{\link{clu}}, \code{\link{err}}, \code{\link{plotMat}}
 #' @keywords cluster graphs package
-#' @docType package
 #' @name blockmodeling
 #' @aliases blockmodeling-package
 #' @useDynLib blockmodeling, .registration = TRUE
-NULL
+"_PACKAGE"

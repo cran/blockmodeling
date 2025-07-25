@@ -2,6 +2,10 @@ Name: blockmodeling
 Title: Generalized and Classical Blockmodeling of Valued Networks
 
 2025
+Version: 1.1.8
+Date: 2025-07-25
+Fixing the LTO Type mismatch warnings.
+
 Version: 1.1.7
 Date: 2025-07-24
 Added a few utility functions, e.g. to compute the length of partitions.

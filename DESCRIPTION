@@ -1,8 +1,8 @@
 Package: blockmodeling
 Type: Package
 Title: Generalized and Classical Blockmodeling of Valued Networks
-Version: 1.1.7
-Date: 2025-07-24
+Version: 1.1.8
+Date: 2025-07-25
 Imports: stats, methods, Matrix, parallel
 Suggests: sna, doRNG, doParallel, foreach
 Depends: R (>= 2.10)
@@ -15,10 +15,10 @@ Description: This is primarily meant as an implementation of generalized blockmo
  Žiberna (2014)<doi:10.1016/j.socnet.2014.04.002>.
 License: GPL (>= 2)
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2025-07-24 13:43:25 UTC; zibernaa
+Packaged: 2025-07-25 09:44:14 UTC; zibernaa
 Author: Aleš Žiberna [aut, cre],
   Marjan Cugmas [ctb]
 Repository: CRAN
-Date/Publication: 2025-07-24 15:20:08 UTC
+Date/Publication: 2025-07-25 10:40:02 UTC

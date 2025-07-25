@@ -1,5 +1,5 @@
-487bc4b725e3a70238a495ebc3071b00 *CHANGES
-9b18ce9fd9ebd7d3b8eb03dee1d62fd3 *DESCRIPTION
+9e415b7bc99251a7b4c2b752b59d028f *CHANGES
+f914888ece93ec495aa3e40a0071e333 *DESCRIPTION
 27851ca68515f51b4754ee08cf8ab108 *NAMESPACE
 ff8507bd9618b6be02e60b1401ce8913 *R/REGE.FC.R
 a025fcd4e42cbd697aff9e236ebd6108 *R/REGE.FC.ow.R
@@ -7,7 +7,7 @@ a025fcd4e42cbd697aff9e236ebd6108 *R/REGE.FC.ow.R
 46fa006c67425ed91db71c10bca4e07f *R/REGE.ow.R
 ebb2bb339d9fe35a68af97fc81eb207c *R/REGE_for.R
 cb44bac947045948198efc883da857a2 *R/RF.R
-0c6e2e3b834e60cdaa830e46d15e8c5a *R/blockmodeling-package.R
+64054d08dd93ac88407bc79d362c781c *R/blockmodeling-package.R
 f58d2084fa5b53e126295d6a1d7086eb *R/canClu.R
 e0e29db17709e0362cb20bf48d6e56fc *R/clu.R
 d0130c894b3b3d25e36211a43a75994e *R/critFunC.R
@@ -74,7 +74,7 @@ d3d9923fa9e7d400c0eef0df8d6cb07f *R/ss.R
 0a228c1e5008d3be85f42d6082fa73f5 *R/unlistCluInt.R
 cf56197339441d8de415e553dd25c348 *R/useneg.R
 4c2cfa53f258d295e139a924e2208646 *R/usepos.R
-afbe4209b3bb961ba3e41cbfe79ea507 *build/partial.rdb
+9d40159f50a5fc9949cbfe95a2884126 *build/partial.rdb
 8a08a96533f4b1a44c2a6388ac6327f2 *data/baker.rda
 a99b8bfa34426e38f9cdd2834c287e4b *data/notesBorrowing.RData
 55c63433d67cb665645bdf30e224fbe8 *inst/CITATION
@@ -128,5 +128,5 @@ c4144d6d8319d36ad517c9d4c7c09636 *src/REGE_OWNM_DIAG_R.f90
 a963f43557e2b9259be9f9622f8cbf5f *src/REGE_OW_R.f90
 e1002e6867e1bd65194543d3676cd778 *src/REGE_R.f90
 c96719c87cb2b242f183fc1f1fd4cca0 *src/blockmodelingC.c
-d2c9c2cf7c538f8e260fc054bfb1b3c8 *src/init.c
+39a758ab5fc66ade15ee4e106a6b8122 *src/init.c
 3532b68b4b601c4fec18d033503e9b99 *tests/tests.R
